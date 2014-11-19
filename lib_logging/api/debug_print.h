@@ -20,8 +20,16 @@ enabled/disabled per debug unit.
 #define DEBUG_UNIT APPLICATION
 #endif
 
+#ifndef DEBUG_PRINT_ENABLE_ALL
+#define DEBUG_PRINT_ENABLE_ALL 0
+#endif
+
 #ifndef DEBUG_PRINT_ENABLE
 #define DEBUG_PRINT_ENABLE 0
+#endif
+
+#if !defined(DEBUG_PRINT_ENABLE_APPLICATION) && !defined(DEBUG_PRINT_DISABLE_APPLICATION)
+#define DEBUG_PRINT_ENABLE_APPLICATION DEBUG_PRINT_ENABLE
 #endif
 
 #define DEBUG_UTILS_JOIN0(x,y) x ## y
@@ -36,7 +44,7 @@ enabled/disabled per debug unit.
 #endif
 
 #if !defined(DEBUG_PRINT_ENABLE0)
-#define DEBUG_PRINT_ENABLE0 DEBUG_PRINT_ENABLE
+#define DEBUG_PRINT_ENABLE0 DEBUG_PRINT_ENABLE_ALL
 #endif
 
 /**  A limited functionality version of printf that is low memory.
