@@ -1,5 +1,8 @@
 Debug printing library
-----------------------
+======================
+
+Overview
+--------
 
 This library provides a lightweight printf function that can be enabled
 or disabled via configuration defines. Code can be declared to be

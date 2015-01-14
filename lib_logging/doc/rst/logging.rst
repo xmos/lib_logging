@@ -1,32 +1,9 @@
-Debug printing library
-======================
-.. rheader::
-
-   Logging |version|
-
-Debug printing library
-----------------------
-
-This library provides a lightweight printf function that can be enabled
-or disabled via configuration defines. Code can be declared to be
-within a "debug unit" (usually a library or application source base)
-and prints can be enabled/disabled per debug unit.
-
-Features
-........
-
-  * Low memory usage
-  * Ability to enable or disable printing via compile options
-  * Ability to enable or disable printing for sets of source files
+.. include:: ../../../README.rst
 
 Software version and dependencies
 .................................
 
-This document pertains to version |version| of the logging library. It is
-intended to be used with version 13.x of the xTIMEcomposer studio tools.
-
-The library does not have any dependencies (i.e. it does not rely on any
-other libraries).
+.. libdeps::
 
 API
 ---
