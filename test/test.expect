@@ -1,0 +1,6 @@
+Hello World
+An int: -5
+An unsigned int: 5
+A string: foo
+A hexadecimal int: 0xABCD
+A char: X
