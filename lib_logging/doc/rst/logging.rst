@@ -58,3 +58,13 @@ DEBUG_PRINT_DISABLE_[debug unit]
   ``DEBUG_PRINT_ENABLE``.
 
 |newpage|
+
+|appendix|
+
+Known Issues
+------------
+
+There are no known issues with this library.
+
+
+.. include:: ../../../CHANGELOG.rst
