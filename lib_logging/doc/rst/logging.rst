@@ -1,10 +1,5 @@
 .. include:: ../../../README.rst
 
-Software version and dependencies
-.................................
-
-.. libdeps::
-
 API
 ---
 

@@ -15,3 +15,8 @@ Features
   * Low memory usage
   * Ability to enable or disable printing via compile options
   * Ability to enable or disable printing for sets of source files
+
+Software version and dependencies
+.................................
+
+.. libdeps::
