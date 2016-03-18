@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <print.h>
 #include <string.h>
+#include <ctype.h>
 
 #undef debug_printf
 
@@ -76,7 +77,16 @@ void debug_printf(char * fmt, ...)
     switch (*fmt) {
     case '%':
       fmt++;
-      switch (*(fmt)) {
+      if (*(fmt) == '-' || *(fmt) == '+' || *(fmt) == '#' || *(fmt) == ' ') {
+        // Ignore flags
+        fmt++;
+      }
+      while (*(fmt) && *(fmt) >= '0' && *(fmt) <= '9') {
+        // Ignore width
+        fmt++;
+      }
+      // Use 'tolower' to ensure both %x/%X do something sensible
+      switch (tolower(*(fmt))) {
       case 'd':
         intArg = va_arg(args, int);
         if (intArg < 0) {
