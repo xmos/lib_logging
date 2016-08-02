@@ -51,7 +51,7 @@ enabled/disabled per debug unit.
 /**  A limited functionality version of printf that is low memory.
  *
  *   This function works like C-standard printf except that it only accepts
- *    %d, %x, %s, %u and %c format specifiers with no conversions.
+ *    %d, %x, %s, %u, %c and %s format specifiers with no conversions.
  *   The function uses the functions from ``print.h`` to do the
  *   underlying printing.
  *
