@@ -1,6 +1,15 @@
 Hello World
 An int: -5
+An int: -5
+An unsigned int: 5
 An unsigned int: 5
 A string: foo
+A string: FOO
 A hexadecimal int: 0xABCD
+A hexadecimal int: 0xABCD
+A char: x
 A char: X
+A pointer: 0
+A pointer: 0
+A hexadecimal int: 0xABCD
+A hexadecimal int: 0x1234
