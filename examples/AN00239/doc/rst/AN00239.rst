@@ -150,26 +150,32 @@ and using either JTAG or xSCOPE as the transport to the host.
    - Transport
    - Program Memory (kB)
    - Time (us)
+   - Channel Ends
  * - None
    - N/A
    - 0.9
    - 0.0
+   - 0
  * - debug_printf()
    - JTAG
    - 1.86
    - 72000
+   - 0
  * - debug_printf()
    - xSCOPE
    - 2.88
    - 8.5
+   - 1 per tile
  * - printf()
    - JTAG
    - 9.02
    - 72000
+   - 0
  * - printf()
    - xSCOPE
    - 9.99
    - 18.6
+   - 1 per tile
 
 .. note:: The JTAG timings are approximate and will depend on a number of factors
           including the host machine being used.
