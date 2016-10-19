@@ -121,7 +121,7 @@ xSCOPE printing
 On the xCORE platform it is possible to have I/O messages sent to the
 console using either JTAG or xSCOPE. The default is for JTAG to be used. However,
 when doing I/O over JTAG all cores on the xCORE are stopped and hence
-realtime functionality is no longer maintained. As a result xSCOPE I/O should
+real-time functionality is no longer maintained. As a result xSCOPE I/O should
 be preferred.
 
 xSCOPE I/O is enabled by creating a ``config.xscope`` file. This file can be
@@ -191,7 +191,7 @@ order in which they will be printed.
 print.h
 .......
 
-The tools provide extreemly lightweight printing functions in ``print.h``. For
+The tools provide extremely lightweight printing functions in ``print.h``. For
 example it is possible to do::
 
   #include <print.h>
