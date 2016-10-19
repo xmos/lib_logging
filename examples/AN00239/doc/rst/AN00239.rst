@@ -53,6 +53,35 @@ The example application outputs "Hello world".
    :start-after: main(
    :end-on: debug_printf(
 
+Building and Running the application using xTIMEcomposer
+........................................................
+
+Once the application source code is imported into the tools it can be built by 
+pressing the :menuitem:`Build` button in xTIMEcomposer.
+This will create the ``AN00239.xe`` binary in the ``bin`` folder of the project. 
+
+A *Run Configuration* then needs to be set up. This can be done by selecting the 
+:menuitem:`Run,Run Configurations...` menu. 
+You can create a new run configuration by right clicking on the 
+:menuitem:`xCORE application` group in the left hand pane and :menuitem:`New`.
+
+Select your XMOS XTAG in the Target box and click **Apply**. 
+Ensure that the :menuitem:`Run Configurations,Target I/O,xSCOPE via xCONNECT...` 
+option is set. 
+You can now click the **Run** button to launch the application.
+
+Building and Running the application using the command line
+...........................................................
+
+First open an command prompt/terminal window with the tools environment setup. 
+A setup batch/script file is provided in the xTIMEcomposer package to do this for you.
+
+Building is done by changing to the folder containing the ``Makefile`` and ``src`` 
+sub-folder and doing a call to ``xmake``. 
+Running the application is then done using the command: ``xrun --xscope bin/AN00239.xe``.
+
+|newpage|
+
 Debug units
 ...........
 
