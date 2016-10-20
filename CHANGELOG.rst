@@ -1,20 +1,20 @@
 Logging change log
 ==================
 
-2.0.2
+2.1.0
 -----
 
-  * Added support for %p
-  * Ignore the case of the format specifiers
-  * Ignore padding and alignment characters
+  * ADDED:    Now supports the %p format specifier
+  * CHANGE:   Ignore the case of the format specifiers
+  * CHANGE:   Ignore padding and alignment characters
 
 2.0.1
 -----
 
-  * Update to source code license and copyright
+  * CHANGE:   Update to source code license and copyright
 
 2.0.0
 -----
 
-  * Restructured library
+  * CHANGE:   Restructured library
 
