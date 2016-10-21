@@ -24,7 +24,7 @@ XCC_FLAGS += -DDEBUG_PRINT_ENABLE=1
 
 # The USED_MODULES variable lists other module used by the application.
 
-USED_MODULES = lib_logging(>=2.0.2)
+USED_MODULES = lib_logging(>=2.1.0)
 
 #=============================================================================
 # The following part of the Makefile includes the common build infrastructure
