@@ -1,0 +1,8 @@
+def use_module(bld):
+    sources = bld.path.ant_glob('src/*.c')
+    bld.env.XCC_FLAGS.append('-Os')
+    bld.module(
+        source=sources,
+        includes='api',
+        optional_headers='debug_conf.h',
+        version='2.1.0')
