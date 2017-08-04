@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+2.1.1
+-----
+
+  * CHANGE:   Test runner script now terminate correctly on Windows
+
 2.1.0
 -----
 
