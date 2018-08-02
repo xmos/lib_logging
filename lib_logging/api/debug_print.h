@@ -70,11 +70,11 @@ enabled/disabled per debug unit.
  *   ``DEBUG_PRINT_ENABLE_[debug unit name]``
  *   in the application's ``debug_conf.h``
  */
-#if defined(__cplusplus) || defined(__XC__)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 void debug_printf(char fmt[], ...);
-#if defined(__cplusplus) || defined(__XC__)
+#if defined(__cplusplus)
 }
 #endif
 
