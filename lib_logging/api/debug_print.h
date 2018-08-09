@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2016, XMOS Ltd, All rights reserved
+// Copyright (c) 2014-2018, XMOS Ltd, All rights reserved
 #ifndef _debug_printf_h_
 #define _debug_printf_h_
 
