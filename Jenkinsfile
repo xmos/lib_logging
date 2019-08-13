@@ -1,8 +1,8 @@
-@Library('xmos_jenkins_shared_library@master') _
+@Library('xmos_jenkins_shared_library@feature/check_org_members') _
 getApproval()
 pipeline {
   agent {
-    label 'x86&&macOS&&Apps'
+    label 'linux'
   }
   environment {
     VIEW = 'logging'
@@ -12,37 +12,13 @@ pipeline {
     skipDefaultCheckout()
   }
   stages {
-    stage('Get view') {
+    stage('Do thing') {
       steps {
-        prepareAppsSandbox("${VIEW}", "${REPO}")
-      }
-    }
-    stage('Library checks') {
-      steps {
-        xcoreLibraryChecks("${REPO}")
-      }
-    }
-    stage('Tests') {
-      steps {
-        runXmostest("${REPO}", 'tests')
-      }
-    }
-    stage('xCORE builds') {
-      steps {
-        dir("${REPO}") {
-          xcoreAllAppsBuild('examples')
-          xcoreAllAppNotesBuild('examples')
-          dir("${REPO}") {
-            runXdoc('doc')
-          }
-        }
+        print env
       }
     }
   }
   post {
-    success {
-      updateViewfiles()
-    }
     cleanup {
       cleanWs()
     }
