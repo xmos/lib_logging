@@ -14,7 +14,7 @@ pipeline {
   stages {
     stage('Do thing') {
       steps {
-        print env
+        sh "env"
       }
     }
   }
