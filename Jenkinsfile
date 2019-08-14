@@ -14,7 +14,9 @@ pipeline {
   stages {
     stage('Do thing') {
       steps {
-        sh "env"
+        script {
+          print scm.userRemoteConfigs[0]
+        }
       }
     }
   }
