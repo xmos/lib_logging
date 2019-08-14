@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@feature/check_org_members') _
+@Library('xmos_jenkins_shared_library@hotfix/approval_fix') _
 getApproval()
 pipeline {
   agent {
