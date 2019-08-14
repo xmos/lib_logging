@@ -15,7 +15,9 @@ pipeline {
     stage('Do thing') {
       steps {
         script {
+          print scm.userRemoteConfigs
           print scm.userRemoteConfigs[0]
+          print scm.userRemoteConfigs[0].dump()
         }
       }
     }
