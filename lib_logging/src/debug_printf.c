@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2016, XMOS Ltd, All rights reserved
 #include <debug_print.h>
-#include <print.h>
 #include <stdarg.h>
 #include <syscall.h>
 #include <limits.h>
-#include <print.h>
 #include <string.h>
 #include <ctype.h>
 
