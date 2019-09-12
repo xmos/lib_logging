@@ -1,12 +1,14 @@
-def configure(conf):
-    conf.load('xwaf.compiler_xcc')
+def options(opt):
+    opt.load('xwaf.xcommon')
 
+def configure(conf):
+    conf.load('xwaf.xcommon')
 
 def build(bld):
-    bld.env.TARGET_ARCH = 'SLICEKIT-L16'
-    bld.env.XCC_FLAGS = ['-DDEBUG_PRINT_ENABLE=1']
+    bld.do_xcommon()
 
-    # Build our program
-    prog = bld.program(
-        source='src/main.xc',
-        depends_on='lib_logging')
+def dist(ctx):
+    ctx.load('xwaf.xcommon')
+
+def distcheck(ctx):
+    ctx.load('xwaf.xcommon')
