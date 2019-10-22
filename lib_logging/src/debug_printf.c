@@ -93,6 +93,7 @@ void debug_printf(char * fmt, ...)
         }
         p += itoa(intArg, p, 10, 0);
         break;
+      case 'l':
       case 'u':
         uintArg = va_arg(args, int);
         p += itoa(uintArg, p, 10, 0);
