@@ -84,6 +84,7 @@ void debug_printf(char * fmt, ...)
         fmt++;
       }
       // Use 'tolower' to ensure both %x/%X do something sensible
+again:
       switch (tolower(*(fmt))) {
       case 'd':
         intArg = va_arg(args, int);
@@ -94,6 +95,8 @@ void debug_printf(char * fmt, ...)
         p += itoa(intArg, p, 10, 0);
         break;
       case 'l':
+          fmt++;
+          goto again;
       case 'u':
         uintArg = va_arg(args, int);
         p += itoa(uintArg, p, 10, 0);
