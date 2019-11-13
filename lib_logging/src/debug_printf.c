@@ -427,6 +427,10 @@ static size_t debug_vsnwprintf(char *str, size_t size, int writeout, const char 
         goto try_next;
     }
 
+    if (par.pos < par.size) {
+        par.str[par.pos] = '\0';
+    }
+
     return par.pos;
 }
 /*---------------------------------------------------*/
