@@ -18,11 +18,6 @@
 # same modules should appear in the setup.py list as given below.
 flake8==3.8.3
 
-# The measure_fft_performance.py script imports gen_test.  I have not found a
-# module by that name.  The pytest-tornado module contains something named
-# gen_test, but I have not found evidence of importing pytest-tornado in whole
-# or in part.
-
 # Development dependencies
 #
 # Each link listed below specifies the path to a setup.py file which are
@@ -35,4 +30,3 @@ flake8==3.8.3
 # If this repository uses the setup functionality (e.g., script entry points)
 # of its own setup.py file, then this list must include an entry for that
 # setup.py file, e.g., '-e .' or '-e ./python' (without the quotes).
--e ../tools_xmostest
