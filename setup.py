@@ -9,7 +9,7 @@ import setuptools
 # least the same minor version as specified in the requirements.txt file.
 # The same modules should appear in the requirements.txt file as given below.
 setuptools.setup(
-    name='tools_xmostest',
+    name='lib_logging',
     package_dir={'': 'lib/python'},
     packages=setuptools.find_packages(where="lib/python"),
     install_requires=[
