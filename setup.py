@@ -10,9 +10,9 @@ import setuptools
 # The same modules should appear in the requirements.txt file as given below.
 setuptools.setup(
     name='lib_logging',
-    package_dir={'': 'lib/python'},
-    packages=setuptools.find_packages(where="lib/python"),
     install_requires=[
         "flake8~=3.8",
+    ],
+    dependency_links=[
     ],
 )
