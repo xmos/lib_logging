@@ -30,5 +30,3 @@ flake8==3.8.3
 # If this repository uses the setup functionality (e.g., script entry points)
 # of its own setup.py file, then this list must include an entry for that
 # setup.py file, e.g., '-e .' or '-e ./python' (without the quotes).
--e ../infr_scripts_py
--e ../infr_apps
