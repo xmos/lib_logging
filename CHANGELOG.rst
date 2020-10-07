@@ -1,11 +1,15 @@
 Logging change log
 ==================
 
+3.0.2
+-----
+
+  * REMOVED: not necessary cpanfile
+
 3.0.1
 -----
 
   * CHANGED: Pin Python package versions
-  * REMOVED: not necessary cpanfile
 
 3.0.0
 -----
