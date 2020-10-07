@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+3.0.1
+-----
+
+  * CHANGED: Pin Python package versions
+
 3.0.0
 -----
 
