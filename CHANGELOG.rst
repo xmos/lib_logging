@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+3.0.2
+-----
+
+  * REMOVED: not necessary cpanfile
+
 3.0.1
 -----
 
