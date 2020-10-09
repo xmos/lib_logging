@@ -73,7 +73,10 @@ enabled/disabled per debug unit.
 #if defined(__cplusplus)
 extern "C" {
 #endif
-void debug_printf(char fmt[], ...);
+#include <stddef.h>
+size_t debug_snprintf(char *str, size_t size, const char *fmt, ...);
+size_t debug_sprintf(char *str, const char *fmt, ...);
+void debug_printf(const char fmt[], ...);
 #if defined(__cplusplus)
 }
 #endif
