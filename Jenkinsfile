@@ -4,11 +4,12 @@ getApproval()
 
 pipeline {
   agent {
-    label 'x86_64&&brew'
+    label 'x86_64&&brew&&linux'
   }
   environment {
     REPO = 'lib_logging'
     VIEW = getViewName(REPO)
+    TOOlS_VERSION = '15.0.1'
   }
   options {
     skipDefaultCheckout()
@@ -18,13 +19,19 @@ pipeline {
       steps {
         xcorePrepareSandbox("${VIEW}", "${REPO}")
         viewEnv {
+          sh "which xcc"
+          sh "xcc --version"
+        }
+        viewEnv("${WORKSPACE}/Installs/Linux/External/Product") {
+          sh "which xcc"
           sh "xcc --version"
         }
         dir("TOOLS") {
           sh "wget -q https://github0.xmos.com/raw/xmos-int/get_tools/master/get_tools.py"
-          sh "get_tools.py 15.0.1"
+          sh "python get_tools.py ${TOOLS_VERSION}"
         }
-        viewEnv("${WORKSPACE}/TOOLS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}") {
+        viewEnv("${WORKSPACE}/TOOLS/tools/${.TOOLS_VERSION}/XMOS/xTIMEcomposer/${TOOLS_VERSION}") {
+          sh "which xcc"
           sh "xcc --version"
         }
       }
