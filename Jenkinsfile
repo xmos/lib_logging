@@ -26,11 +26,8 @@ pipeline {
           sh "which xcc"
           sh "xcc --version"
         }
-        dir("TOOLS") {
-          sh "wget -q https://github0.xmos.com/raw/xmos-int/get_tools/master/get_tools.py"
-          sh "python get_tools.py ${TOOLS_VERSION}"
-        }
-        viewEnv("${WORKSPACE}/TOOLS/tools/${TOOLS_VERSION}/XMOS/xTIMEcomposer/${TOOLS_VERSION}") {
+        sh "curl https://github0.xmos.com/raw/xmos-int/get_tools/master/get_tools.py | python - '${TOOLS_VERSION}'"
+        viewEnv("tools/${TOOLS_VERSION}/XMOS/xTIMEcomposer/${TOOLS_VERSION}") {
           sh "which xcc"
           sh "xcc --version"
         }
