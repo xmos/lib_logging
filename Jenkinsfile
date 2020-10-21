@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@v0.14.2') _
+@Library('xmos_jenkins_shared_library@feature/view_env_path') _
 
 getApproval()
 
@@ -17,6 +17,16 @@ pipeline {
     stage('Get view') {
       steps {
         xcorePrepareSandbox("${VIEW}", "${REPO}")
+        viewEnv {
+          sh "xcc --version"
+        }
+        dir("TOOLS") {
+          sh "wget -q https://github0.xmos.com/raw/xmos-int/get_tools/master/get_tools.py"
+          sh "get_tools.py 15.0.1"
+        }
+        viewEnv("${WORKSPACE}/TOOLS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}") {
+          sh "xcc --version"
+        }
       }
     }
     stage('Library checks') {
