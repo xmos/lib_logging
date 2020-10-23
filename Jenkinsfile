@@ -18,6 +18,7 @@ pipeline {
       steps {
         setGitHubStatus("QUICK", "Test Status", "SUCCESS", "https://github.com/xmos/lib_logging","95b416a8b131e69653068a7aaff76a1631810279")
         xcorePrepareSandbox("${VIEW}", "${REPO}")
+        setGitHubStatus("DEFAULT", "Test Status Defaults", "SUCCESS")
       }
     }
     stage('Library checks') {
@@ -35,7 +36,9 @@ pipeline {
     stage('xCORE builds') {
       steps {
         dir("${REPO}") {
-          xcoreAllAppsBuild('examples')
+          withGitHubStatus("App build") {
+            xcoreAllAppsBuild('examples')
+          }
           withGitHubStatus("App notes") {
             xcoreAllAppNotesBuild('examples')
             dir("${REPO}") {
