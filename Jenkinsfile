@@ -16,6 +16,7 @@ pipeline {
   stages {
     stage('Get view') {
       steps {
+        setGitHubStatus("QUICK", "Test Status", "SUCCESS", "https://github.com/xmos/lib_logging","95b416a8b131e69653068a7aaff76a1631810279")
         xcorePrepareSandbox("${VIEW}", "${REPO}")
       }
     }
