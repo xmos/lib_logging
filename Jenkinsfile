@@ -21,7 +21,9 @@ pipeline {
     }
     stage('Library checks') {
       steps {
-        xcoreLibraryChecks("${REPO}")
+        withGitHubStatus("lib checks") {
+          xcoreLibraryChecks("${REPO}")
+        }
       }
     }
     stage('Tests') {
@@ -34,10 +36,10 @@ pipeline {
     stage('xCORE builds') {
       steps {
         dir("${REPO}") {
-          withGitHubStatus("App build") {
+          withGitHubStatus("app build") {
             xcoreAllAppsBuild('examples')
           }
-          withGitHubStatus("App notes") {
+          withGitHubStatus("app notes") {
             xcoreAllAppNotesBuild('examples')
             dir("${REPO}") {
               runXdoc('doc')
