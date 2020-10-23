@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@v0.14.2') _
+@Library('xmos_jenkins_shared_library@feature/gh_commit_status') _
 
 getApproval()
 
@@ -26,16 +26,22 @@ pipeline {
     }
     stage('Tests') {
       steps {
-        runXmostest("${REPO}", 'tests')
+        withGitHubStatus("xmostest") {
+          runXmostest("${REPO}", 'tests')
+        }
       }
     }
     stage('xCORE builds') {
       steps {
         dir("${REPO}") {
           xcoreAllAppsBuild('examples')
-          xcoreAllAppNotesBuild('examples')
-          dir("${REPO}") {
-            runXdoc('doc')
+          withGitHubStatus("App notes") {
+            setStatus("App notes", "App note build started..", "PENDING")
+            xcoreAllAppNotesBuild('examples')
+            setStatus("App notes", "xdoc started..", "PENDING")
+            dir("${REPO}") {
+              runXdoc('doc')
+            }
           }
         }
       }
