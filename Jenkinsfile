@@ -36,9 +36,7 @@ pipeline {
         dir("${REPO}") {
           xcoreAllAppsBuild('examples')
           withGitHubStatus("App notes") {
-            setStatus("App notes", "App note build started..", "PENDING")
             xcoreAllAppNotesBuild('examples')
-            setStatus("App notes", "xdoc started..", "PENDING")
             dir("${REPO}") {
               runXdoc('doc')
             }
