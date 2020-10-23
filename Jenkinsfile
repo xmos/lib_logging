@@ -29,6 +29,7 @@ pipeline {
     stage('Tests') {
       steps {
         withGitHubStatus("xmostest") {
+          sh "echo '    os.path.should_fail()' > tests/runtests.py"
           runXmostest("${REPO}", 'tests')
         }
       }
