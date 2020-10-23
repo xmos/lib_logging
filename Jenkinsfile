@@ -16,9 +16,7 @@ pipeline {
   stages {
     stage('Get view') {
       steps {
-        withGitHubStatus("Get view") {
-          xcorePrepareSandbox("${VIEW}", "${REPO}")
-        }
+        xcorePrepareSandbox("${VIEW}", "${REPO}")
       }
     }
     stage('Library checks') {
