@@ -22,12 +22,8 @@ pipeline {
           sh "which xcc"
           sh "xcc --version"
         }
-        viewEnv("${WORKSPACE}/Installs/Linux/External/Product") {
-          sh "which xcc"
-          sh "xcc --version"
-        }
         sh "curl https://github0.xmos.com/raw/xmos-int/get_tools/master/get_tools.py | python - '${TOOLS_VERSION}'"
-        viewEnv("tools/${TOOLS_VERSION}/XMOS/xTIMEcomposer/${TOOLS_VERSION}") {
+        toolsEnv("tools/${TOOLS_VERSION}/XMOS/xTIMEcomposer/${TOOLS_VERSION}") {
           sh "which xcc"
           sh "xcc --version"
         }
