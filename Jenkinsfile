@@ -27,6 +27,9 @@ pipeline {
             sh "which xcc"
           }
         }
+        toolsEnv("tools/not/even/a/real/path") {
+          println "this should fail the whole build"
+        }
         xcorePrepareSandbox("${VIEW}", "${REPO}")
         viewEnv {
           sh "which xcc"
