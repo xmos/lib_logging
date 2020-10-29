@@ -25,6 +25,7 @@ pipeline {
         warnError("Expected toolsEnv failure") {
           toolsEnv("tools/not/even/a/real/path") {
             sh "which xcc"
+          }
         }
         xcorePrepareSandbox("${VIEW}", "${REPO}")
         viewEnv {
