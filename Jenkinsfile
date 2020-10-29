@@ -17,6 +17,15 @@ pipeline {
   stages {
     stage('Get view') {
       steps {
+        warnError("Expected viewEnv error") {
+          viewEnv {
+            sh "which xcc"
+          }
+        }
+        warnError("Expected toolsEnv failure") {
+          toolsEnv("tools/not/even/a/real/path") {
+            sh "which xcc"
+        }
         xcorePrepareSandbox("${VIEW}", "${REPO}")
         viewEnv {
           sh "which xcc"
