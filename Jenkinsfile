@@ -14,6 +14,12 @@ pipeline {
     skipDefaultCheckout()
   }
   stages {
+    stage('Test non-sandbox checkout') {
+      steps {
+        checkout scm
+        setGitHubStatus("only checkout", "successful", "SUCCESS")
+      }
+    }
     stage('Get view') {
       steps {
         xcorePrepareSandbox("${VIEW}", "${REPO}")
