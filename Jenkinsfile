@@ -4,6 +4,13 @@ getApproval()
 
 pipeline {
   agent none
+  parameters {
+    string(
+      name: 'AI_TOOLS_VERSION',
+      defaultValue: '15.0.3',
+      description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
+    )
+  }
   stages {
     stage('Standard Run') {
       agent {
@@ -49,16 +56,9 @@ pipeline {
       agent {
         label "srv-bri-nuc2"
       }
-      parameters {
-        string(
-          name: 'TOOLS_VERSION',
-          defaultValue: '15.0.3',
-          description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
-        )
-      }
       environment {
         // '/XMOS/tools' from get_tools.py and rest from tools installers
-        TOOLS_PATH = "/XMOS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}"
+        TOOLS_PATH = "/XMOS/tools/${params.AI_TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.AI_TOOLS_VERSION}"
         REPO = 'lib_logging'
         VIEW = getViewName(REPO)
       }
@@ -73,7 +73,7 @@ pipeline {
         }
         stage('Install Dependencies') {
           steps {
-            sh '/XMOS/get_tools.py ' + params.TOOLS_VERSION
+            sh '/XMOS/get_tools.py ' + params.AI_TOOLS_VERSION
             installDependencies()
           }
         }
