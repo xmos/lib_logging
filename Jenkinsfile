@@ -104,8 +104,8 @@ pipeline {
                     dir('tests/debug_printf_test') {
                       withVenv() {
                         toolsEnv(TOOLS_PATH) {
-                          sh 'xrun -l && pwd'
-                          sh 'xrun --io test.xe &> hw_out.txt && diff hw_out.txt ../../legacy_tests/test.expect'
+                          //Note we need to specify an xtag id since there may be multiple targets
+                          sh 'xrun --io --id 0 test.xe &> hw_out.txt && cat hw_out.txt && diff hw_out.txt ../../legacy_tests/test.expect'
                         }          
                       }
                     }
