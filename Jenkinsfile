@@ -15,28 +15,30 @@ pipeline {
       options {
         skipDefaultCheckout()
       }
-      stage('Get view') {
-        steps {
-          xcorePrepareSandbox("${VIEW}", "${REPO}")
+      stages{
+        stage('Get view') {
+          steps {
+            xcorePrepareSandbox("${VIEW}", "${REPO}")
+          }
         }
-      }
-      stage('Library checks') {
-        steps {
-          xcoreLibraryChecks("${REPO}")
+        stage('Library checks') {
+          steps {
+            xcoreLibraryChecks("${REPO}")
+          }
         }
-      }
-      stage('Tests') {
-        steps {
-          runXmostest("${REPO}", 'legacy_tests')
+        stage('Tests') {
+          steps {
+            runXmostest("${REPO}", 'legacy_tests')
+          }
         }
-      }
-      stage('xCORE builds') {
-        steps {
-          dir("${REPO}") {
-            xcoreAllAppsBuild('examples')
-            xcoreAllAppNotesBuild('examples')
+        stage('xCORE builds') {
+          steps {
             dir("${REPO}") {
-              runXdoc('doc')
+              xcoreAllAppsBuild('examples')
+              xcoreAllAppNotesBuild('examples')
+              dir("${REPO}") {
+                runXdoc('doc')
+              }
             }
           }
         }
