@@ -28,7 +28,6 @@ pipeline {
           stages{
             stage('Get view') {
               steps {
-                sh 'rm -f ./cur_view.txt'
                 xcorePrepareSandbox("${VIEW}", "${REPO}")
               }
             }
@@ -52,6 +51,14 @@ pipeline {
                   }
                 }
               }
+            }
+          }
+          post {
+            success {
+              updateViewfiles()
+            }
+            cleanup {
+              xcoreCleanSandbox()
             }
           }
         }
@@ -113,19 +120,15 @@ pipeline {
                   }
                 }
               } //stages
-            } //stage XS3
+            } //stage XS3 tests
           } //stages
+          post {
+            cleanup {
+              cleanWs()
+            }
+          }
         } //AI stage
       } //par
     }//stage
   }//stages
-  post {
-    success {
-      updateViewfiles()
-    }
-    cleanup {
-      xcoreCleanSandbox()
-      cleanWs()
-    }
-  }
 }
