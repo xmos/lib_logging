@@ -3,6 +3,7 @@
 getApproval()
 
 pipeline {
+  agent none
   stages {
     stage('Standard Run') {
       agent {
@@ -108,7 +109,7 @@ pipeline {
               }
             }
           } //par
-          } //stage XS3
+        } //stage XS3
       } //stages
     } //AI stage
   }
