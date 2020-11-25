@@ -86,22 +86,23 @@ pipeline {
         }
         stage('XS3 Tests'){
           parallel {
-            stage('XS3 hardware test') {
+            stage('XS3 xsim test') {
               steps {
                 dir('tests/debug_printf_test') {
                   withVenv() {
                     toolsEnv(TOOLS_PATH) {
-                      sh 'xsim test.xe &> sim_out.txt && diff sim_out.txt ../../legacy_tests/test.expect'
+                      sh 'xsim test.xe &> sim_out.txt && cat sim_out.txt && diff sim_out.txt ../../legacy_tests/test.expect'
                     }
                   }
                 }
               }
             }
-            stage('XS3 xsim test'){
+            stage('XS3 hardware test'){
               steps {
                 dir('tests/debug_printf_test') {
                   withVenv() {
                     toolsEnv(TOOLS_PATH) {
+                      sh 'xrun -l && pwd'
                       sh 'xrun --io test.xe &> hw_out.txt && diff hw_out.txt ../../legacy_tests/test.expect'
                     }          
                   }
