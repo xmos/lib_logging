@@ -49,7 +49,9 @@ pipeline {
       xcoreCleanSandbox()
     }
   }
+}
 
+pipeline {
   agent {
     label "srv-bri-nuc2"
   }
