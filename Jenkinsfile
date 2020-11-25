@@ -87,7 +87,7 @@ pipeline {
               }
             }
             stage('XS3 Tests'){
-              parallel {
+              stages {
                 stage('XS3 xsim test') {
                   steps {
                     dir('tests/debug_printf_test') {
@@ -111,7 +111,7 @@ pipeline {
                     }
                   }
                 }
-              } //par
+              } //stages
             } //stage XS3
           } //stages
         } //AI stage
