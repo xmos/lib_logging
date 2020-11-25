@@ -1,37 +1,56 @@
-ifeq ($(USING_XWAF),1)
-all:
-	xwaf configure build
-else # USING_XWAF
-# The TARGET variable determines what target system the application is
-# compiled for. It either refers to an XN file in the source directories
-# or a valid argument for the --target option when compiling.
+TARGET_EXEC ?= test.xe
+PROJ_ROOT = ../..
+BUILD_DIR ?= ./build/very/deep
 
-TARGET = SLICEKIT-L16
 
-# The APP_NAME variable determines the name of the final .xe file. It should
-# not include the .xe postfix. If left blank the name will default to
-# the project name
+#list the source files we care about
+SRCS := ./src/main.xc
 
-APP_NAME = 
+#Add dep lib sources
+SRCS += $(shell find ../../lib_logging -name '*.c')
 
-# The flags passed to xcc when building the application
-# You can also set the following to override flags for a particular language:
-#
-#    XCC_XC_FLAGS, XCC_C_FLAGS, XCC_ASM_FLAGS, XCC_CPP_FLAGS
-#
-# If the variable XCC_MAP_FLAGS is set it overrides the flags passed to
-# xcc for the final link (mapping) stage.
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+OBJS_FILE := $(notdir $(SRCS:%=$(BUILD_DIR)/%.o))
 
-XCC_FLAGS = -DDEBUG_PRINT_ENABLE=1
+DEPS := $(OBJS:.o=.d)
 
-# The USED_MODULES variable lists other module used by the application.
+INC_DIRS := $(shell find $(SRCS) -type d)
+INC_DIRS += $(shell find $(PROJ_ROOT) -name api -type d)
+INC_DIRS += $(dir $(SRCS))
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-USED_MODULES = lib_logging
+TARGET_FLAG ?= -target=XCORE-AI-EXPLORER
+XCC ?= xcc
 
-#=============================================================================
-# The following part of the Makefile includes the common build infrastructure
-# for compiling XMOS applications. You should not need to edit below here.
+COMMON_FLAGS ?= $(INC_FLAGS) $(TARGET_FLAG) -Os -g -DDEBUG_PRINT_ENABLE=1
+CFLAGS ?= -c 
 
-XMOS_MAKE_PATH ?= ../..
-include $(XMOS_MAKE_PATH)/xcommon/module_xcommon/build/Makefile.common
-endif # USING_XWAF
+XCFLAGS ?= -c
+ASMFLAGS ?= $(INC_FLAGS) $(TARGET_FLAG)
+
+$(TARGET_EXEC): $(OBJS) 
+	$(XCC) $(TARGET_FLAG) -o $@ $^ -report
+
+# c source
+$(BUILD_DIR)/%.c.o: %.c
+	$(MKDIR_P) $(dir $@)
+	$(XCC) $(COMMON_FLAGS) $(CFLAGS) -c $< -o $@
+
+# xc source
+$(BUILD_DIR)/%.xc.o: %.xc
+	$(MKDIR_P) $(dir $@)
+	$(XCC) $(COMMON_FLAGS) $(XCFLAGS) -c $< -o $@
+
+# asm source
+$(BUILD_DIR)/%.S.o: %.S
+	$(MKDIR_P) $(dir $@)
+	$(XCC) $(ASMFLAGS) -c $< -o $@
+
+.PHONY: clean
+
+clean:
+	$(RM) -r $(BUILD_DIR) build $(TARGET_EXEC)
+
+-include $(DEPS)
+
+MKDIR_P ?= mkdir -p
