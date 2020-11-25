@@ -11,7 +11,7 @@ pipeline {
       description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
     )
   }
-  stages {
+  parallel {
     stage('Standard Run') {
       agent {
         label 'x86_64&&brew'
@@ -52,7 +52,7 @@ pipeline {
         }
       }
     }
-    stage('XCORE AI stages') {
+    stage('XCORE AI tests') {
       agent {
         label "srv-bri-nuc2"
       }
@@ -113,7 +113,7 @@ pipeline {
         } //stage XS3
       } //stages
     } //AI stage
-  }
+  } //par
   post {
     success {
       updateViewfiles()
