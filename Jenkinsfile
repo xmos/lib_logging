@@ -48,6 +48,7 @@ pipeline {
     cleanup {
       xcoreCleanSandbox()
     }
+  }
 
   agent {
     label "srv-bri-nuc2"
@@ -110,4 +111,9 @@ pipeline {
       }
     } //par
   } //stages
+  post {
+    cleanup {
+      cleanWs()
+    }
+  }
 }
