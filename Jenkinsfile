@@ -28,7 +28,7 @@ pipeline {
           stages{
             stage('Get view') {
               steps {
-                sh 'rm -f cur_view.txt' //Temp hack
+                sh 'rm -f cur_view.txt' //Temp hack. Need to work out why post/cleanup is not doing its job
                 xcorePrepareSandbox("${VIEW}", "${REPO}")
               }
             }
