@@ -28,6 +28,7 @@ pipeline {
           stages{
             stage('Get view') {
               steps {
+                sh 'rm -f cur_view.txt' //Temp hack
                 xcorePrepareSandbox("${VIEW}", "${REPO}")
               }
             }
