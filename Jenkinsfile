@@ -11,6 +11,13 @@ pipeline {
       description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
     )
   }
+  environment {
+    REPO = 'lib_logging'
+    VIEW = getViewName(REPO)
+  }
+  options {
+    skipDefaultCheckout()
+  }
   stages{
     stage ('Full test'){
       parallel {
@@ -18,17 +25,9 @@ pipeline {
           agent {
             label 'x86_64&&brew'
           }
-          environment {
-            REPO = 'lib_logging'
-            VIEW = getViewName(REPO)
-          }
-          options {
-            skipDefaultCheckout()
-          }
           stages{
             stage('Get view') {
               steps {
-                sh 'rm -f cur_view.txt' //Temp hack. Need to work out why post/cleanup is not doing its job
                 xcorePrepareSandbox("${VIEW}", "${REPO}")
               }
             }
@@ -55,9 +54,6 @@ pipeline {
             }
           }
           post {
-            success {
-              updateViewfiles()
-            }
             cleanup {
               xcoreCleanSandbox()
             }
@@ -65,16 +61,11 @@ pipeline {
         }
         stage('XCORE AI tests') {
           agent {
-            label "srv-bri-nuc2"
+            label "xs3"
           }
           environment {
             // '/XMOS/tools' from get_tools.py and rest from tools installers
             TOOLS_PATH = "/XMOS/tools/${params.AI_TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.AI_TOOLS_VERSION}"
-            REPO = 'lib_logging'
-            VIEW = getViewName(REPO)
-          }
-          options {
-            skipDefaultCheckout()
           }
           stages {
             stage('Checkout') {
@@ -132,4 +123,9 @@ pipeline {
       } //par
     }//stage
   }//stages
+  post {
+    success {
+      updateViewfiles()
+    }
+  }
 }
