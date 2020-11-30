@@ -76,7 +76,7 @@ pipeline {
             stage('Install Dependencies') {
               steps {
                 sh '/XMOS/get_tools.py ' + params.AI_TOOLS_VERSION
-                installPipfile()
+                installPipfile(true)
               }
             }
             stage('Build') {
