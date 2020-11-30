@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@v0.15.0') _
+@Library('xmos_jenkins_shared_library@develop') _
 
 getApproval()
 
