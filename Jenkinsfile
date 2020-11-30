@@ -125,7 +125,7 @@ pipeline {
   }//stages
   post {
     success {
-      node('master') {
+      node('linux') {
         updateViewfiles()
       }
     }
