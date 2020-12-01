@@ -110,13 +110,13 @@ pipeline {
         }
       }
     }// xcore.ai
-
-    stage('Update view files') {
-      agent {
-        label 'x86_64&&brew'
-      }
-      steps {
-        updateViewfiles()
+  }
+  post {
+    success {
+      node('linux') {
+        stage('Update view files') {
+          updateViewfiles()
+        }
       }
     }
   }
