@@ -4,6 +4,18 @@ getApproval()
 
 pipeline {
   agent none
+  //Tools for AI verif
+  parameters {
+     string(
+       name: 'TOOLS_VERSION',
+       defaultValue: '15.0.3',
+       description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
+     )
+   }
+  environment {
+    // '/XMOS/tools' from get_tools.py and rest from tools installers
+    TOOLS_PATH = "/XMOS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}"
+  }
   stages {
     stage('Standard build and XS2 tests') {
       agent {
@@ -40,7 +52,7 @@ pipeline {
               dir('examples/app_debug_printf'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe'
+                stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe, '
               }
               dir('examples/AN00239'){
                 runXmake(".", "", "XCOREAI=1")
@@ -50,7 +62,7 @@ pipeline {
               dir('tests/debug_printf_test'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
+                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe, ../test.expect'
               }
               xcoreAllAppNotesBuild('examples')
               dir("${REPO}") {
@@ -71,7 +83,12 @@ pipeline {
         label 'xs3'
       }
       steps{
-        println 'Dummy stage on XS3'
+        toolsEnv(TOOLS_PATH) {  // load xmos tools
+          unstash 'debug_printf_test'
+          sh 'tree'
+          sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
+          sh 'cat debug_printf_test.txt && diff debug_printf_test.txt test.expect'
+        }
       }
       post {
         cleanup {
