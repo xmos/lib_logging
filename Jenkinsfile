@@ -40,17 +40,17 @@ pipeline {
               dir('examples/app_debug_printf'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'bin/xcoreai', includes: '*.xe'
+                stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe'
               }
               dir('examples/AN00239'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'bin/xcoreai', includes: '*.xe'
+                stash name: 'AN00239', includes: 'bin/xcoreai/*.xe'
               }
               dir('tests/debug_printf_test'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'bin/xcoreai', includes: '*.xe'
+                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
               }
               xcoreAllAppNotesBuild('examples')
               dir("${REPO}") {
