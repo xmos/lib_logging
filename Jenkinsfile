@@ -37,10 +37,21 @@ pipeline {
             dir("${REPO}") {
               xcoreAllAppsBuild('examples')
               //Build these individually (or we can extend xcoreAllAppsBuild to support an argument
-              runXmake("examples/app_debug_printf", "", "XCOREAI=1")
-              sh 'tree examples/app_debug_printf'
-              runXmake("examples/AN00239", "", "XCOREAI=1")
-              runXmake("tests/debug_printf_test", "", "XCOREAI=1")
+              dir('examples/app_debug_printf'){
+                runXmake(".", "", "XCOREAI=1")
+                sh 'tree'
+                stash name: 'bin/xcoreai', includes: '*.xe'
+              }
+              dir('examples/AN00239'){
+                runXmake(".", "", "XCOREAI=1")
+                sh 'tree'
+                stash name: 'bin/xcoreai', includes: '*.xe'
+              }
+              dir('tests/debug_printf_test'){
+                runXmake(".", "", "XCOREAI=1")
+                sh 'tree'
+                stash name: 'bin/xcoreai', includes: '*.xe'
+              }
               xcoreAllAppNotesBuild('examples')
               dir("${REPO}") {
                 runXdoc('doc')
