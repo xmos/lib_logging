@@ -12,10 +12,6 @@ pipeline {
        description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
      )
    }
-  environment {
-    // '/XMOS/tools' from get_tools.py and rest from tools installers
-    TOOLS_PATH = "/XMOS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}"
-  }
   stages {
     stage('Standard build and XS2 tests') {
       agent {
@@ -79,6 +75,10 @@ pipeline {
     stage('xcore.ai Verification'){
       agent {
         label 'xcore.ai-explorer'
+      }
+      environment {
+        // '/XMOS/tools' from get_tools.py and rest from tools installers
+        TOOLS_PATH = "/XMOS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}"
       }
       stages{
         stage('Install Dependencies') {
