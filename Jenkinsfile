@@ -8,7 +8,7 @@ pipeline {
   parameters {
      string(
        name: 'TOOLS_VERSION',
-       defaultValue: '15.0.3',
+       defaultValue: '15.0.2',
        description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
      )
    }
@@ -75,30 +75,40 @@ pipeline {
         }
       }
     }//Stage standard build
-    stage('XS3 Verification'){
+    stage('XCORE-AI Verification'){
       agent {
         label 'xs3'
       }
-      steps{
-        toolsEnv(TOOLS_PATH) {  // load xmos tools
-          //Run this and diff against expected output. Note we have the lib files here available
-          unstash 'debug_printf_test'
-          sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
-          sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
-
-          //Just run these and error on exception
-          unstash 'AN00239'
-          sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
-          unstash 'app_debug_printf'
-          sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+      stages{
+        stage('Install Dependencies') {
+          steps {
+            sh '/XMOS/get_tools.py ' + params.TOOLS_VERSION
+            installDependencies()
+          }
         }
-      }
+        stage('xrun'){
+          steps{
+            toolsEnv(TOOLS_PATH) {  // load xmos tools
+              //Run this and diff against expected output. Note we have the lib files here available
+              unstash 'debug_printf_test'
+              sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
+              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+
+              //Just run these and error on exception
+              unstash 'AN00239'
+              sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
+              unstash 'app_debug_printf'
+              sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+            }
+          }
+        }
+      }//stages
       post {
         cleanup {
           cleanWs()
         }
       }
-    }//XS3
+    }//XCORE-AI
   }
   post {
     success {
