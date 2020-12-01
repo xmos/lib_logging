@@ -57,11 +57,18 @@ pipeline {
       steps{
         println 'Dummy stage on XS3'
       }
+      post {
+        cleanup {
+          cleanWs()
+        }
+      }
     }
   }
   post {
     success {
-      updateViewfiles()
+      node('linux') { //Need to specify agent. We cannot  use agent syntax unf
+        updateViewfiles()
+      }
     }
   }
 }
