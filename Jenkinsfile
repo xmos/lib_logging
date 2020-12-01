@@ -4,11 +4,11 @@ getApproval()
 
 pipeline {
   agent none
-  //Tools for AI verif
+  //Tools for AI verif stage. Tools for standard stage in view file
   parameters {
      string(
        name: 'TOOLS_VERSION',
-       defaultValue: '15.0.2',
+       defaultValue: '15.0.3',
        description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
      )
    }
@@ -98,7 +98,7 @@ pipeline {
           cleanWs()
         }
       }
-    }
+    }//XS3
   }
   post {
     success {
