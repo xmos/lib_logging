@@ -74,10 +74,11 @@ pipeline {
           xcoreCleanSandbox()
         }
       }
-    }//Stage standard build
-    stage('XCORE-AI Verification'){
+    }// Stage standard build
+
+    stage('xcore.ai Verification'){
       agent {
-        label 'xs3'
+        label 'xcore.ai-explorer'
       }
       stages{
         stage('Install Dependencies') {
@@ -108,11 +109,13 @@ pipeline {
           cleanWs()
         }
       }
-    }//XCORE-AI
-  }
-  post {
-    success {
-      node('linux') { //Need to specify agent. We cannot  use agent syntax unf
+    }// xcore.ai
+
+    stage('Update view files') {
+      agent {
+        label 'x86_64&&brew'
+      }
+      steps {
         updateViewfiles()
       }
     }
