@@ -3,6 +3,9 @@
 getApproval()
 
 pipeline {
+  agent {
+    label none
+  }
   stages {
     stage('Standard build and XS2 tests') {
       agent {
@@ -51,7 +54,7 @@ pipeline {
     }//Stage standard build
     stage('XS3 Verification'){
       agent {
-        label 'xcore.ai-explorer'
+        label 'xs3'
       }
       steps{
         println 'Dummy stage on XS3'
