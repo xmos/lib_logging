@@ -66,7 +66,7 @@ pipeline {
               dir('tests/debug_printf_test'){
                 runXmake(".", "", "XCOREAI=1")
                 sh 'tree'
-                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe, ../test.expect'
+                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
               }
             }
           }
@@ -87,7 +87,7 @@ pipeline {
           unstash 'debug_printf_test'
           sh 'tree'
           sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
-          sh 'cat debug_printf_test.txt && diff debug_printf_test.txt test.expect'
+          sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
         }
       }
       post {
