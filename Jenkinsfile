@@ -55,17 +55,14 @@ pipeline {
               //Build these individually (or we can extend xcoreAllAppsBuild to support an argument
               dir('examples/app_debug_printf'){
                 runXmake(".", "", "XCOREAI=1")
-                sh 'tree'
                 stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe, '
               }
               dir('examples/AN00239'){
                 runXmake(".", "", "XCOREAI=1")
-                sh 'tree'
                 stash name: 'AN00239', includes: 'bin/xcoreai/*.xe'
               }
               dir('tests/debug_printf_test'){
                 runXmake(".", "", "XCOREAI=1")
-                sh 'tree'
                 stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
               }
             }
@@ -84,10 +81,16 @@ pipeline {
       }
       steps{
         toolsEnv(TOOLS_PATH) {  // load xmos tools
+          //Run this and diff against expected output. Note we have the lib files here available
           unstash 'debug_printf_test'
-          sh 'tree'
           sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
           sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+
+          //Just run these and error on exception
+          unstash 'AN00239'
+          sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
+          unstash 'app_debug_printf'
+          sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
         }
       }
       post {
