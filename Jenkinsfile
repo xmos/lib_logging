@@ -3,9 +3,7 @@
 getApproval()
 
 pipeline {
-  agent {
-    label none
-  }
+  agent none
   stages {
     stage('Standard build and XS2 tests') {
       agent {
