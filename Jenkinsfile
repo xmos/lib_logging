@@ -46,15 +46,19 @@ pipeline {
           }
         }
       }// stages
-      cleanup {
-        xcoreCleanSandbox()
+      post {
+        cleanup {
+          xcoreCleanSandbox()
+        }
       }
     }//Stage standard build
     stage('XS3 Verification'){
       agent {
         label 'xcore.ai-explorer'
       }
-      println 'Dummy stage on XS3'
+      steps{
+        println 'Dummy stage on XS3'
+      }
     }
   }
   post {
