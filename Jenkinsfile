@@ -74,10 +74,11 @@ pipeline {
           xcoreCleanSandbox()
         }
       }
-    }//Stage standard build
-    stage('XS3 Verification'){
+    }// Stage standard build
+
+    stage('xcore.ai Verification'){
       agent {
-        label 'xs3'
+        label 'xcore.ai-explorer'
       }
       steps{
         toolsEnv(TOOLS_PATH) {  // load xmos tools
@@ -98,11 +99,13 @@ pipeline {
           cleanWs()
         }
       }
-    }//XS3
-  }
-  post {
-    success {
-      node('linux') { //Need to specify agent. We cannot  use agent syntax unf
+    }// xcore.ai
+
+    stage('Update view files') {
+      agent {
+        label 'x86_64&&brew'
+      }
+      steps {
         updateViewfiles()
       }
     }
