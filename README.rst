@@ -19,4 +19,4 @@ Features
 Software version and dependencies
 .................................
 
-.. libdeps::
+For a list of direct dependencies, look for DEPENDENT_MODULES in lib_logging/module_build_info.

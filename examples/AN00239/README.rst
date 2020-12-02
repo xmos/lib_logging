@@ -1,10 +1,6 @@
 Using the logging library
 =========================
 
-.. appnote:: AN00239
-
-.. version:: 1.0.0
-
 Summary
 -------
 
@@ -15,7 +11,7 @@ control of which debug messages are enabled.
 Required tools and libraries
 ............................
 
-.. appdeps::
+For a list of direct dependencies, look for USED_MODULES in the Makefile.
 
 Required hardware
 .................
