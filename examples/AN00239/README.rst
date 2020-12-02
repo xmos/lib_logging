@@ -11,6 +11,7 @@ control of which debug messages are enabled.
 Required tools and libraries
 ............................
 
+The CHANGELOG contains information about the current and previous versions.
 For a list of direct dependencies, look for USED_MODULES in the Makefile.
 
 Required hardware
