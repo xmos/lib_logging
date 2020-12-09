@@ -8,8 +8,8 @@ The logging library provides the ``debug_printf()`` function which is a lightwei
 implementation of ``printf()``.  It also provides a framework for compile-time
 control of which debug messages are enabled.
 
-Required tools and libraries
-............................
+Software dependencies
+.....................
 
 For a list of direct dependencies, look for USED_MODULES in the Makefile.
 
