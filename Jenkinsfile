@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@v0.15.1') _
+@Library('xmos_jenkins_shared_library@feature/support_xcoreai_2') _
 
 getApproval()
 
@@ -40,28 +40,18 @@ pipeline {
             runXmostest("${REPO}", 'tests')
           }
         }
-        stage('xCORE builds') {
+        stage('xs2 builds') {
           steps {
-            dir("${REPO}") {
-              xcoreAllAppsBuild('examples')
-              xcoreAllAppNotesBuild('examples')
-              dir("${REPO}") {
-                runXdoc('doc')
-              }
-              //Build these individually (or we can extend xcoreAllAppsBuild to support an argument
-              dir('examples/app_debug_printf'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe, '
-              }
-              dir('examples/AN00239'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'AN00239', includes: 'bin/xcoreai/*.xe'
-              }
-              dir('tests/debug_printf_test'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
-              }
-            }
+            xcoreAllAppsBuild("${REPO}/examples")
+            xcoreAllAppNotesBuild("${REPO}/examples")
+            runXdoc("${REPO}/${REPO}")
+          }
+        }
+        stage('xs3 builds') {
+          steps {
+            xcoreAllAppsBuild("${REPO}/examples", "", "XCOREAI=1")
+            xcoreAllAppNotesBuild("${REPO}/examples", "", "XCOREAI=1")
+            runXdoc("${REPO}/${REPO}")
           }
         }
       }// stages
