@@ -44,14 +44,12 @@ pipeline {
           steps {
             xcoreAllAppsBuild("${REPO}/examples")
             xcoreAllAppNotesBuild("${REPO}/examples")
-            runXdoc("${REPO}/${REPO}")
           }
         }
         stage('xs3 builds') {
           steps {
             xcoreAllAppsBuild("${REPO}/examples", "", "XCOREAI=1")
             xcoreAllAppNotesBuild("${REPO}/examples", "", "XCOREAI=1")
-            runXdoc("${REPO}/${REPO}")
           }
         }
       }// stages
