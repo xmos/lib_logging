@@ -60,6 +60,7 @@ pipeline {
             forAllMatch("${REPO}/examples", "app_*/") { path ->
               runXmake(path, "", "XCOREAI=1")
             }
+            runXmake("${REPO}/tests/debug_printf_test", "", "XCOREAI=1")
           }
         }
         stage('xs3 docs') {
@@ -68,6 +69,11 @@ pipeline {
               runXmake(path, "", "XCOREAI=1")
               runXdoc("${path}/doc")
             }
+          }
+        }
+        stage('stash xs3 bins') {
+          steps {
+            stash name: 'xs3_bins', includes: '**/bin/xcoreai/*.xe'
           }
         }
       }// stages
@@ -97,14 +103,12 @@ pipeline {
           steps{
             toolsEnv(TOOLS_PATH) {  // load xmos tools
               //Run this and diff against expected output. Note we have the lib files here available
-              unstash 'debug_printf_test'
+              unstash 'xs3_bins'
               sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
               sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
 
               //Just run these and error on exception
-              unstash 'AN00239'
               sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
-              unstash 'app_debug_printf'
               sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
             }
           }
