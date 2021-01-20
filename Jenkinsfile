@@ -1,4 +1,4 @@
-@Library('xmos_jenkins_shared_library@v0.15.1') _
+@Library('xmos_jenkins_shared_library@feature/install-virtualenv') _
 
 getApproval()
 
@@ -15,7 +15,7 @@ pipeline {
   stages {
     stage('Standard build and XS2 tests') {
       agent {
-        label 'x86_64&&brew'
+        label 'fistrick'
       }
       environment {
         REPO = 'lib_logging'
