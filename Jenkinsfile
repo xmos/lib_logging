@@ -104,6 +104,7 @@ pipeline {
             toolsEnv(TOOLS_PATH) {  // load xmos tools
               //Run this and diff against expected output. Note we have the lib files here available
               unstash 'xs3_bins'
+              sh 'ls -la'
               sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
               sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
 
