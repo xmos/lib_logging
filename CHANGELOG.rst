@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+3.1.0
+-----
+
+  * CHANGED: Use XMOS Public Licence Version 1
+
 3.0.2
 -----
 
