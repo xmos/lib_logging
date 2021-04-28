@@ -120,6 +120,6 @@ pipeline {
       steps {
         updateViewfiles()
       }
-    {
+    }
   }
 }
