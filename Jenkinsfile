@@ -104,19 +104,12 @@ pipeline {
           }
         }
       }//stages
-      post {
-        cleanup {
-          cleanWs()
-        }
+      success {
+        updateViewfiles()
+      }
+      cleanup {
+        xcoreCleanSandbox()
       }
     }// xcore.ai
-  }
-  post {
-    success {
-      updateViewfiles()
-    }
-    cleanup {
-      xcoreCleanSandbox()
-    }
   }
 }
