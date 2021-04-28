@@ -104,12 +104,22 @@ pipeline {
           }
         }
       }//stages
-      success {
-        updateViewfiles()
-      }
-      cleanup {
-        xcoreCleanSandbox()
+      post {
+        cleanup {
+          cleanWs()
+        }
       }
     }// xcore.ai
+  }
+  stage('Update view files') {
+    agent {
+      label 'x86_64&&brew'
+    }
+    when {
+      expression { return currentBuild.currentResult == "SUCCESS" }
+    }
+    steps {
+      updateViewfiles()
+    }
   }
 }
