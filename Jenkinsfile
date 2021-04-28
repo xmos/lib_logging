@@ -45,9 +45,7 @@ pipeline {
             dir("${REPO}") {
               xcoreAllAppsBuild('examples')
               xcoreAllAppNotesBuild('examples')
-              dir("${REPO}") {
-                runXdoc('doc')
-              }
+
               //Build these individually (or we can extend xcoreAllAppsBuild to support an argument
               dir('examples/app_debug_printf'){
                 runXmake(".", "", "XCOREAI=1")
@@ -62,6 +60,13 @@ pipeline {
                 stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
               }
             }
+          }
+        }
+        stage('Build docs') {
+          steps {
+            runXdoc("${REPO}/${REPO}/doc")
+            // Archive all the generated .pdf docs
+            archiveArtifacts artifacts: "${REPO}/**/pdf/*.pdf", fingerprint: true, allowEmptyArchive: true
           }
         }
       }// stages
