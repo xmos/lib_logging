@@ -6,12 +6,12 @@ pipeline {
   agent none
   //Tools for AI verif stage. Tools for standard stage in view file
   parameters {
-     string(
-       name: 'TOOLS_VERSION',
-       defaultValue: '15.0.2',
-       description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
-     )
-   }
+    string(
+      name: 'TOOLS_VERSION',
+      defaultValue: '15.0.2',
+      description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
+    )
+  }
   stages {
     stage('Standard build and XS2 tests') {
       agent {
@@ -116,7 +116,7 @@ pipeline {
         label 'x86_64&&brew'
       }
       when {
-        expression { return currentBuild.result == "SUCCESS" }
+        expression { return currentBuild.currentResult == "SUCCESS" }
       }
       steps {
         updateViewfiles()
