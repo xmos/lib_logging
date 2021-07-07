@@ -90,6 +90,10 @@ pipeline {
           steps {
             sh '/XMOS/get_tools.py ' + params.TOOLS_VERSION
             installDependencies()
+            withVenv {
+              sh 'pip install git+git://github0.xmos.com/xmos-int/xtagctl.git@v1.3.1'
+              sh 'xtagctl reset_all XCORE-AI-EXPLORER'
+            }
           }
         }
         stage('xrun'){
