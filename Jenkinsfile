@@ -90,25 +90,27 @@ pipeline {
           steps {
             sh '/XMOS/get_tools.py ' + params.TOOLS_VERSION
             installDependencies()
-            withVenv {
-              sh 'pip install git+git://github0.xmos.com/xmos-int/xtagctl.git@v1.3.1'
-              sh 'xtagctl reset_all XCORE-AI-EXPLORER'
-            }
           }
         }
         stage('xrun'){
           steps{
             toolsEnv(TOOLS_PATH) {  // load xmos tools
-              //Run this and diff against expected output. Note we have the lib files here available
-              unstash 'debug_printf_test'
-              sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
-              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+              withVenv {  // activate virtualenv
+                //Install xtagctl and reset xtags
+                sh 'pip install git+git://github0.xmos.com/xmos-int/xtagctl.git@v1.3.1'
+                sh 'xtagctl reset_all XCORE-AI-EXPLORER'
 
-              //Just run these and error on exception
-              unstash 'AN00239'
-              sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
-              unstash 'app_debug_printf'
-              sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+                //Run this and diff against expected output. Note we have the lib files here available
+                unstash 'debug_printf_test'
+                sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
+                sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+
+                //Just run these and error on exception
+                unstash 'AN00239'
+                sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
+                unstash 'app_debug_printf'
+                sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+              }
             }
           }
         }
