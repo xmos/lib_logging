@@ -81,7 +81,7 @@ pipeline {
         }
         stage('xrun'){
           steps{
-            dir("{REPO}") {
+            dir("${REPO}") {
               viewEnv {  // load xmos tools
                 withVenv {  // activate virtualenv
                   //Install xtagctl and reset xtags
