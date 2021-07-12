@@ -4,25 +4,17 @@ getApproval()
 
 pipeline {
   agent none
-  //Tools for AI verif stage. Tools for standard stage in view file
-  parameters {
-    string(
-      name: 'TOOLS_VERSION',
-      defaultValue: '15.0.2',
-      description: 'The tools version to build with (check /projects/tools/ReleasesTools/)'
-    )
+  environment {
+    REPO = 'lib_logging'
+    VIEW = getViewName(REPO)
+  }
+  options {
+    skipDefaultCheckout()
   }
   stages {
     stage('Standard build and XS2 tests') {
       agent {
         label 'x86_64&&brew'
-      }
-      environment {
-        REPO = 'lib_logging'
-        VIEW = getViewName(REPO)
-      }
-      options {
-        skipDefaultCheckout()
       }
       stages{
         stage('Get view') {
@@ -81,30 +73,33 @@ pipeline {
       agent {
         label 'xcore.ai-explorer'
       }
-      environment {
-        // '/XMOS/tools' from get_tools.py and rest from tools installers
-        TOOLS_PATH = "/XMOS/tools/${params.TOOLS_VERSION}/XMOS/xTIMEcomposer/${params.TOOLS_VERSION}"
-      }
       stages{
-        stage('Install Dependencies') {
+        stage('Get view') {
           steps {
-            sh '/XMOS/get_tools.py ' + params.TOOLS_VERSION
-            installDependencies()
+            xcorePrepareSandbox("${VIEW}", "${REPO}")
           }
         }
         stage('xrun'){
           steps{
-            toolsEnv(TOOLS_PATH) {  // load xmos tools
-              //Run this and diff against expected output. Note we have the lib files here available
-              unstash 'debug_printf_test'
-              sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
-              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+            dir("${REPO}") {
+              viewEnv {  // load xmos tools
+                withVenv {  // activate virtualenv
+                  //Install xtagctl and reset xtags
+                  sh "pip install -e ${WORKSPACE}/xtagctl"
+                  sh 'xtagctl reset_all XCORE-AI-EXPLORER'
 
-              //Just run these and error on exception
-              unstash 'AN00239'
-              sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
-              unstash 'app_debug_printf'
-              sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+                  //Run this and diff against expected output. Note we have the lib files here available
+                  unstash 'debug_printf_test'
+                  sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
+                  sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
+
+                  //Just run these and error on exception
+                  unstash 'AN00239'
+                  sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
+                  unstash 'app_debug_printf'
+                  sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+                }
+              }
             }
           }
         }
