@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+3.1.1
+-----
+
+  * CHANGED: Jenkinsfile used for CI
+
 3.1.0
 -----
 
