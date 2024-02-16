@@ -1,6 +1,11 @@
 Logging change log
 ==================
 
+3.2.0
+-----
+
+  * ADDED:   Support for XCommon CMake build system
+
 3.1.1
 -----
 
