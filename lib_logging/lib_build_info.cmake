@@ -1,0 +1,8 @@
+set(LIB_NAME lib_logging)
+set(LIB_VERSION 3.2.0)
+set(LIB_INCLUDES api)
+set(LIB_COMPILER_FLAGS -Os)
+set(LIB_DEPENDENT_MODULES "")
+set(LIB_OPTIONAL_HEADERS debug_conf.h)
+
+XMOS_REGISTER_MODULE()
