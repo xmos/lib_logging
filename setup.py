@@ -12,7 +12,7 @@ import setuptools
 setuptools.setup(
     name='lib_logging',
     install_requires=[
-        "flake8~=3.8",
+        "flake8~=7.0",
     ],
     dependency_links=[
     ],
