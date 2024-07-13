@@ -1,4 +1,4 @@
-# Copyright 2020-2021 XMOS LIMITED.
+# Copyright 2020-2024 XMOS LIMITED.
 # This Software is subject to the terms of the XMOS Public Licence: Version 1.
 import setuptools
 
@@ -12,7 +12,7 @@ import setuptools
 setuptools.setup(
     name='lib_logging',
     install_requires=[
-        "flake8~=3.8",
+        "flake8~=7.0",
     ],
     dependency_links=[
     ],
