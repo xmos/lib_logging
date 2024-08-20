@@ -1,5 +1,5 @@
-Logging change log
-==================
+lib_logging change log
+======================
 
 3.2.0
 -----
