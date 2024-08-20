@@ -1,4 +1,6 @@
-@Library('xmos_jenkins_shared_library@v0.32.0') _
+// This file relates to internal XMOS infrastructure and should be ignored by external users
+
+@Library('xmos_jenkins_shared_library@develop') _
 
 getApproval()
 
@@ -6,121 +8,98 @@ pipeline {
   agent none
   environment {
     REPO = 'lib_logging'
-    VIEW = getViewName(REPO)
   }
   options {
+    buildDiscarder(xmosDiscardBuildSettings())
     skipDefaultCheckout()
+    timestamps()
+  }
+  parameters {
+    string(
+      name: 'TOOLS_VERSION',
+      defaultValue: '15.3.0',
+      description: 'The XTC tools version'
+    )
   }
   stages {
-    stage('Standard build and XS2 tests') {
+    stage('Build') {
       agent {
         label 'x86_64 && linux'
       }
-      stages{
-        stage('Get view') {
-          steps {
-            xcorePrepareSandbox("${VIEW}", "${REPO}")
-          }
-        }
-        stage('Library checks') {
-          steps {
-            xcoreLibraryChecks("${REPO}")
-          }
-        }
-        stage('Tests') {
-          steps {
-            runXmostest("${REPO}", 'tests')
-          }
-        }
-        stage('xCORE builds') {
+      stages {
+        stage('xcore app build') {
           steps {
             dir("${REPO}") {
-              xcoreAllAppsBuild('examples')
-              xcoreAllAppNotesBuild('examples')
+              checkout scm
 
-              //Build these individually (or we can extend xcoreAllAppsBuild to support an argument
-              dir('examples/app_debug_printf'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'app_debug_printf', includes: 'bin/xcoreai/*.xe, '
-              }
-              dir('examples/AN00239'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'AN00239', includes: 'bin/xcoreai/*.xe'
-              }
-              dir('tests/debug_printf_test'){
-                runXmake(".", "", "XCOREAI=1")
-                stash name: 'debug_printf_test', includes: 'bin/xcoreai/*.xe'
+              dir("examples") {
+                withTools(params.TOOLS_VERSION) {
+                  sh 'cmake -G "Unix Makefiles" -B build'
+                  sh 'xmake -C build -j 8'
+                  stash name: 'examples', includes: '**/*.xe'
+                }
               }
             }
+            runLibraryChecks("${WORKSPACE}/${REPO}", "v2.0.0")
           }
         }
         stage('Build docs') {
           steps {
-            runXdoc("${REPO}/${REPO}/doc")
-            // Archive all the generated .pdf docs
-            archiveArtifacts artifacts: "${REPO}/**/pdf/*.pdf", fingerprint: true, allowEmptyArchive: true
-          }
-        }
-      }// stages
-      post {
-        cleanup {
-          xcoreCleanSandbox()
-        }
-      }
-    }// Stage standard build
-
-    stage('xcore.ai Verification'){
-      agent {
-        label 'xcore.ai'
-      }
-      stages{
-        stage('Get view') {
-          steps {
-            xcorePrepareSandbox("${VIEW}", "${REPO}")
-          }
-        }
-        stage('xrun'){
-          steps{
             dir("${REPO}") {
-              viewEnv {  // load xmos tools
-                withVenv {  // activate virtualenv
-                  //Install xtagctl and reset xtags
-                  sh "pip install -e ${WORKSPACE}/xtagctl"
-                  sh 'xtagctl reset_all XCORE-AI-EXPLORER'
-
-                  //Run this and diff against expected output. Note we have the lib files here available
-                  unstash 'debug_printf_test'
-                  sh 'xrun --io --id 0 bin/xcoreai/debug_printf_test.xe &> debug_printf_test.txt'
-                  sh 'cat debug_printf_test.txt && diff debug_printf_test.txt tests/test.expect'
-
-                  //Just run these and error on exception
-                  unstash 'AN00239'
-                  sh 'xrun --io --id 0 bin/xcoreai/AN00239.xe'
-                  unstash 'app_debug_printf'
-                  sh 'xrun --io --id 0 bin/xcoreai/app_debug_printf.xe'
+              withXdoc("v2.0.20.2.post0") {
+                withTools(params.TOOLS_VERSION) {
+                  dir("${REPO}/doc") {
+                    sh "xdoc xmospdf"
+                    archiveArtifacts artifacts: "pdf/*.pdf"
+                  }
+                  dir("examples/AN00239/doc") {
+                    sh "xdoc xmospdf"
+                    archiveArtifacts artifacts: "pdf/*.pdf"
+                  }
                 }
               }
             }
           }
         }
-      }//stages
+      }
       post {
         cleanup {
-          cleanWs()
+          xcoreCleanSandbox()
+        }
+      }
+    }
+
+    stage('xcore.ai Verification') {
+      agent {
+        label 'xcore.ai'
+      }
+      steps {
+        dir("${REPO}") {
+          checkout scm
+          withTools(params.TOOLS_VERSION) {
+            dir("tests") {
+              sh 'cmake -G "Unix Makefiles" -B build'
+              sh 'xmake -C build -j 8'
+
+              //Run this and diff against expected output. Note we have the lib files here available
+              sh 'xrun --io --id 0 debug_printf_test/bin/debug_printf_test.xe &> debug_printf_test.txt'
+              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt test.expect'
+            }
+
+            dir("examples") {
+              unstash 'examples'
+              //Just run these and error on exception
+              sh 'xrun --io --id 0 AN00239/bin/AN00239.xe'
+              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
+            }
+          }
+        }
+      }
+      post {
+        cleanup {
+          xcoreCleanSandbox()
         }
       }
     }// xcore.ai
-
-    stage('Update view files') {
-      agent {
-        label 'x86_64 && linux'
-      }
-      when {
-        expression { return currentBuild.currentResult == "SUCCESS" }
-      }
-      steps {
-        updateViewfiles()
-      }
-    }
   }
 }
