@@ -1,7 +1,7 @@
 ---
 lib_name: lib_logging
 project: '{{lib_name}}'
-title: '{{lib_name}}: XMOS Debug Printing Library'
+title: '{{lib_name}}: Debug Printing'
 version: 3.2.0
 
 documentation:
