@@ -1,9 +1,10 @@
+##################################
+AN00239: Using the logging library
+##################################
+
 ********
 Overview
 ********
-
-Introduction
-============
 
 This application note shows how to use the logging library. It covers the
 difference between the logging library (``debug_printf()``) and the system library
@@ -202,20 +203,12 @@ other logical cores. Whereas::
 
 will be printed as a single line.
 
-|newpage|
+***************
+Further Reading
+***************
 
-**********
-References
-**********
+ * `XTC tools`_
 
- * XMOS Tools User Guide
+ * `XMOS xCORE Programming Guide`_
 
-   https://www.xmos.com/documentation/XM-014363-PC-9/html/
-
- * XMOS xCORE Programming Guide
-
-   https://www.xmos.com/published/xmos-programming-guide
-
- * XMOS Libraries
-
-   https://www.xmos.com/libraries/
+ * `XMOS Libraries <https://www.xmos.com/libraries>`_

@@ -1,7 +1,7 @@
 ---
 an_number: AN00239
 project: '{{an_number}}'
-title: '{{an_number}}: Using the debug printing library'
+title: '{{an_number}}: Using the logging library'
 version: 1.0.0
 
 documentation:

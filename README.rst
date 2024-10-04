@@ -9,7 +9,7 @@ lib_logging: Debug Printing
 :scope: General Use
 :description: Debug printing
 :category: General Purpose
-:keywords: Logging, Debugging
+:keywords: logging, debugging
 :devices: xcore.ai, xcore-200
 
 ********
