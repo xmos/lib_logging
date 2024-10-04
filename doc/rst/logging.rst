@@ -1,4 +1,4 @@
-.. include:: ../../README.rst
+
 
 |newpage|
 
@@ -54,10 +54,3 @@ DEBUG_PRINT_DISABLE_[debug unit]
   debug unit. If set to 1, this will override the default set by
   ``DEBUG_PRINT_ENABLE``.
 
-Known Issues
-============
-
-There are no known issues with this library.
-
-
-.. include:: ../../CHANGELOG.rst

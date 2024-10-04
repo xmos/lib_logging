@@ -1,7 +1,3 @@
-.. include:: ../../README.rst
-
-|newpage|
-
 ********
 Overview
 ********
@@ -223,19 +219,3 @@ References
  * XMOS Libraries
 
    https://www.xmos.com/libraries/
-
-|newpage|
-
-************************
-Full Source code listing
-************************
-
-Source code for main.xc
-=======================
-
-.. literalinclude:: ../../src/main.xc
-
-Source code for unit.xc
-=======================
-
-.. literalinclude:: ../../src/unit.xc
