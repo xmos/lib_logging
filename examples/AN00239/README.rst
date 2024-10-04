@@ -42,7 +42,7 @@ Required Tools
 Required Libraries (Dependencies)
 *********************************
 
-  * None
+  * ``lib_logging``
 
 *************************
 Related Application Notes
