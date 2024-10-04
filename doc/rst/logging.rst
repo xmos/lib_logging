@@ -1,6 +1,15 @@
+###########################
+lib_logging: Debug Printing
+###########################
 
+************
+Introduction
+************
 
-|newpage|
+This library provides a lightweight printf function that can be enabled
+or disabled via configuration defines. Code can be declared to be
+within a "debug unit" (usually a library or application source base)
+and prints can be enabled/disabled per debug unit.
 
 API
 ===
@@ -8,13 +17,10 @@ API
 To use this module, include ``lib_logging`` in the application's
 ``APP_DEPENDENT_MODULES`` list and include the ``debug_print.h`` header file.
 
-Debug printf
-------------
-
 .. doxygenfunction:: debug_printf
 
 Debug Units
------------
+===========
 
 A source file can be added to a debug unit by defining the ``DEBUG_UNIT`` macro before inclusion of ``debug_print.h``. For example::
 
@@ -29,7 +35,7 @@ convenient to do it in the ``lib_build_info.cmake`` file of the module e.g.::
 If no ``DEBUG_UNIT`` is defined then the default debug unit is ``APPLICATION``.
 
 Enabling Printing
------------------
+=================
 
 By default, debug printing is turned *off*. To enable printing you
 need to pass the correct command line option to compilation. The
