@@ -1,12 +1,10 @@
-.. include:: ../../README.rst
+##################################
+AN00239: Using the logging library
+##################################
 
-|newpage|
-
+********
 Overview
---------
-
-Introduction
-............
+********
 
 This application note shows how to use the logging library. It covers the
 difference between the logging library (``debug_printf()``) and the system library
@@ -15,88 +13,79 @@ printing function (``printf()``).
 It also covers the difference between JTAG and xSCOPE to perform the I/O to the
 host, including approximate values for resource usage and performance of each approach.
 
+*****************************
 Example logging library usage
------------------------------
+*****************************
 
-The Makefile
-............
+The CMakeLists.txt file
+=======================
 
-The logging library needs to be added to the ``USED_MODULES`` line
-of your Makefile::
+To start using the XMOS logging library, you need to add ``lib_logging`` to the
+dependent module list in the ``CMakeLists.txt`` file::
 
-  USED_MODULES = .. lib_logging ..
+  set(APP_DEPENDENT_MODULES "lib_logging")
+
+The dependencies for this example are specified by ``deps.cmake`` in the ``examples``
+directory and are included in the application ``CMakeLists.txt`` file.
 
 Also, ``debug_printf()`` calls are only active if you enable
-them in your Makefile. This is done by by setting ``DEBUG_PRINT_ENABLE``
-to 1 in the ``XCC_FLAGS``::
+them in your ``CMakeLists.txt`` file. This is done by by setting ``DEBUG_PRINT_ENABLE``
+to 1 in the ``APP_COMPILER_FLAGS``::
 
-  XCC_FLAGS += -DDEBUG_PRINT_ENABLE=1
+  set(APP_COMPILER_FLAGS ... -DDEBUG_PRINT_ENABLE=1 ...)
 
 Include
-.......
+=======
 
 The function prototypes are declared in a single header file which must
 be included from your source file::
 
   #include "debug_print.h"
 
-Using the logging library
-.........................
-
-The logging library provides the ``debug_printf()`` function. The function has
-the same form as a standard ``printf()``, but only supports a subset of formats -
-namely the %d, %x, %s, %u, %p and %c format specifiers with no conversions.
+Example application output
+==========================
 
 The example application outputs "Hello world".
 
-.. literalinclude:: main.xc
+.. literalinclude:: ../../src/main.xc
    :start-after: main(
-   :end-on: debug_printf(
-
-Building and Running the application using xTIMEcomposer
-........................................................
-
-Once the application source code is imported into the tools it can be built by 
-pressing the :menuitem:`Build` button in xTIMEcomposer.
-This will create the ``AN00239.xe`` binary in the ``bin`` folder of the project. 
-
-A *Run Configuration* then needs to be set up. This can be done by selecting the 
-:menuitem:`Run,Run Configurations...` menu. 
-You can create a new run configuration by right clicking on the 
-:menuitem:`xCORE application` group in the left hand pane and :menuitem:`New`.
-
-Select your XMOS XTAG in the Target box and click **Apply**. 
-Ensure that the :menuitem:`Run Configurations,Target I/O,xSCOPE via xCONNECT...` 
-option is set. 
-You can now click the **Run** button to launch the application.
+   :end-at: debug_printf(
 
 Building and Running the application using the command line
-...........................................................
+===========================================================
 
 First open an command prompt/terminal window with the tools environment setup. 
 A setup batch/script file is provided in the xTIMEcomposer package to do this for you.
 
-Building is done by changing to the folder containing the ``Makefile`` and ``src`` 
-sub-folder and doing a call to ``xmake``. 
-Running the application is then done using the command: ``xrun --xscope bin/AN00239.xe``.
+To configure the build run the following from an XTC command prompt::
 
-|newpage|
+    cd examples
+    cd AN00239
+    cmake -B build -G "Unix Makefiles"
+
+Finally, the application binaries can be built using ``xmake``::
+
+    xmake -C build
+
+Running the application is then done using the command::
+
+    xrun --xscope bin/AN00239.xe
 
 Debug units
-...........
+===========
 
 Applications can be created with different *units* whose debug output is independently
 controlled. The example application also calls a function in another unit:
 
-.. literalinclude:: main.xc
+.. literalinclude:: ../../src/main.xc
    :start-after: debug_printf(
-   :end-on: unit_function(
+   :end-at: unit_function(
 
 That file has put its debug messages as a separate debug unit by doing:
 
-.. literalinclude:: unit.xc
-   :start-on: define
-   :end-on: include
+.. literalinclude:: ../../src/unit.xc
+   :start-at: define
+   :end-at: include
 
 And by default these debug messages are not enabled, so running the program
 will only produce the following output::
@@ -105,9 +94,9 @@ will only produce the following output::
   Hello world
 
 In order to enable the debug_print messages in ``unit.xc`` it is necessary to
-add the following to the Makefile (uncomment the line)::
+add to the list of compiler flags in the ``CMakeLists.txt`` file::
 
-  XCC_FLAGS += -DDEBUG_PRINT_ENABLE_unit=1
+  set(APP_COMPILER_FLAGS ... -DDEBUG_PRINT_ENABLE_unit=1 ...)
 
 After rebuilding the application it will now produce::
 
@@ -116,7 +105,7 @@ After rebuilding the application it will now produce::
   Unit print
 
 xSCOPE printing
-...............
+===============
 
 On the xCORE platform it is possible to have I/O messages sent to the
 console using either JTAG or xSCOPE. The default is for JTAG to be used. However,
@@ -133,11 +122,12 @@ contains::
   <xSCOPEconfig ioMode="basic" enabled="true">
   </xSCOPEconfig>
 
+*****
 Notes
------
+*****
 
 Resource usage
-..............
+==============
 
 The following table shows the memory and cycle requirements for doing
 a simple print of "Hello world %d\\n", using either ``printf()`` or ``debug_printf()``,
@@ -181,21 +171,21 @@ and using either JTAG or xSCOPE as the transport to the host.
           including the host machine being used.
 
 Lossless vs lossy
-.................
+=================
 
 The advantage of using xSCOPE instead of JTAG should be clear from the performance
 figures above. However, it is important to understand that xSCOPE is a lossy
 transport and as such if too much I/O is created then messages can be lost.
 
 Ordering
-........
+========
 
 It is also essential to understand that messages produced by different
 logical cores are interleaved on the host console. There is no guarantee of the
 order in which they will be printed.
 
 print.h
-.......
+=======
 
 The tools provide extremely lightweight printing functions in ``print.h``. For
 example it is possible to do::
@@ -213,35 +203,12 @@ other logical cores. Whereas::
 
 will be printed as a single line.
 
-|newpage|
+***************
+Further Reading
+***************
 
-References
-----------
+ * `XTC tools`_
 
-.. nopoints::
+ * `XMOS xCORE Programming Guide`_
 
- * XMOS Tools User Guide
-
-   http://www.xmos.com/published/xtimecomposer-user-guide
-
- * XMOS xCORE Programming Guide
-
-   http://www.xmos.com/published/xmos-programming-guide
-
-|newpage|
-
-Full Source code listing
--------------------------
-
-Source code for main.xc
-.......................
-
-.. literalinclude:: main.xc
-   :largelisting:
-
-Source code for unit.xc
-.......................
-
-.. literalinclude:: unit.xc
-   :largelisting:
-
+ * `XMOS Libraries <https://www.xmos.com/libraries>`_

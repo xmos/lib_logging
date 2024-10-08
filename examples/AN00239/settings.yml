@@ -1,0 +1,21 @@
+---
+an_number: AN00239
+project: '{{an_number}}'
+title: '{{an_number}}: Using the logging library'
+version: 1.0.0
+
+documentation:
+  root_doc: doc/rst/AN00239.rst
+  linkcheck_ignore_regex: ['']
+  cognidox_part_number: XM-010809-AN
+  pdfs:
+    doc/rst/AN00239.rst:
+      pdf_title: '{{title}}'
+      pdf_filename: '{{an_number}}_v{{version}}'
+      pdf_short: yes
+    README.rst:
+      pdf_title: '{{title}} (README)'
+      pdf_filename: '{{an_number}}_v{{version}}_readme'
+      pdf_short: yes
+software:
+  cognidox_part_number: XM-010832-SM

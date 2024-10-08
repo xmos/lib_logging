@@ -20,6 +20,11 @@ pipeline {
       defaultValue: '15.3.0',
       description: 'The XTC tools version'
     )
+    string(
+      name: 'XMOSDOC_VERSION',
+      defaultValue: 'v6.1.0',
+      description: 'The xmosdoc version'
+    )
   }
   stages {
     stage('Build') {
@@ -39,26 +44,12 @@ pipeline {
                   stash name: 'examples', includes: '**/*.xe'
                 }
               }
-            }
-            runLibraryChecks("${WORKSPACE}/${REPO}", "v2.0.1")
-          }
-        }
-        stage('Build docs') {
-          steps {
-            dir("${REPO}") {
-              withXdoc("v2.0.20.2.post0") {
-                withTools(params.TOOLS_VERSION) {
-                  dir("${REPO}/doc") {
-                    sh "xdoc xmospdf"
-                    archiveArtifacts artifacts: "pdf/*.pdf"
-                  }
-                  dir("examples/AN00239/doc") {
-                    sh "xdoc xmospdf"
-                    archiveArtifacts artifacts: "pdf/*.pdf"
-                  }
-                }
+              buildDocs()
+              dir("examples/AN00239") {
+                buildDocs()
               }
             }
+            runLibraryChecks("${WORKSPACE}/${REPO}", "v2.0.1")
           }
         }
       }
