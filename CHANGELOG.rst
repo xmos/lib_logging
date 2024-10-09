@@ -1,8 +1,8 @@
 lib_logging change log
 ======================
 
-UNRELEASED
-----------
+3.3.0
+-----
 
   * CHANGED: Build applications using XCommon CMake instead of XCommon
 

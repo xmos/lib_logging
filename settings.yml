@@ -2,7 +2,7 @@
 lib_name: lib_logging
 project: '{{lib_name}}'
 title: '{{lib_name}}: Debug Printing'
-version: 3.2.0
+version: 3.3.0
 
 documentation:
   exclude_patterns_path: doc/exclude_patterns.inc
