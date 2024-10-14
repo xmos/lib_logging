@@ -5,7 +5,7 @@ lib_logging: Debug Printing
 ###########################
 
 :vendor: XMOS
-:version: 3.3.0
+:version: 3.3.1
 :scope: General Use
 :description: Debug printing
 :category: General Purpose

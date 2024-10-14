@@ -11,6 +11,9 @@ or disabled via configuration defines. Code can be declared to be
 within a "debug unit" (usually a library or application source base)
 and prints can be enabled/disabled per debug unit.
 
+``lib_logging`` is intended to be used with the `XCommon CMake <https://www.xmos.com/file/xcommon-cmake-documentation/?version=latest>`_
+, the `XMOS` application build and dependency management system.
+
 ***
 API
 ***
@@ -21,7 +24,7 @@ To use this module, include ``lib_logging`` in the application's
 .. doxygenfunction:: debug_printf
 
 ***********
-Debug Units
+Debug units
 ***********
 
 A source file can be added to a debug unit by defining the ``DEBUG_UNIT`` macro before inclusion of ``debug_print.h``. For example::
@@ -37,7 +40,7 @@ convenient to do it in the ``lib_build_info.cmake`` file of the module e.g.::
 If no ``DEBUG_UNIT`` is defined then the default debug unit is ``APPLICATION``.
 
 *****************
-Enabling Printing
+Enabling printing
 *****************
 
 By default, debug printing is turned *off*. To enable printing you

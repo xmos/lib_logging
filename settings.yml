@@ -2,18 +2,18 @@
 lib_name: lib_logging
 project: '{{lib_name}}'
 title: '{{lib_name}}: Debug Printing'
-version: 3.3.0
+version: 3.3.1
 
 documentation:
   exclude_patterns_path: doc/exclude_patterns.inc
-  root_doc: doc/rst/logging.rst
+  root_doc: doc/rst/lib_logging.rst
   linkcheck_ignore_regex: ['']
   cognidox_part_number: XM-006383-UG
   doxygen_projects:
     lib_logging:
       doxyfile_path: doc/Doxyfile.inc
   pdfs:
-    doc/rst/logging.rst:
+    doc/rst/lib_logging.rst:
       pdf_title: '{{title}}'
       pdf_filename: '{{lib_name}}_v{{version}}'
     README.rst:
