@@ -1,6 +1,11 @@
 lib_logging change log
 ======================
 
+3.3.1
+-----
+
+  * CHANGED: Documentation updates
+
 3.3.0
 -----
 
