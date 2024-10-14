@@ -25,6 +25,11 @@ pipeline {
       defaultValue: 'v6.1.2',
       description: 'The xmosdoc version'
     )
+    string(
+      name: 'INFR_APPS_VERSION',
+      defaultValue: 'v2.0.1',
+      description: 'The infr_apps version'
+    )
   }
   stages {
     stage('Build') {
@@ -49,7 +54,7 @@ pipeline {
                 buildDocs()
               }
             }
-            runLibraryChecks("${WORKSPACE}/${REPO}", "v2.0.1")
+            runLibraryChecks("${WORKSPACE}/${REPO}", "${params.INFR_APPS_VERSION}")
           }
         }
       }
