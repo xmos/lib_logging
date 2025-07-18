@@ -1,13 +1,13 @@
 // This file relates to internal XMOS infrastructure and should be ignored by external users
 
-@Library('xmos_jenkins_shared_library@v0.34.0') _
+@Library('xmos_jenkins_shared_library@v0.39.0') _
 
 getApproval()
 
 pipeline {
   agent none
   environment {
-    REPO = 'lib_logging'
+    REPO_NAME = 'lib_logging'
   }
   options {
     buildDiscarder(xmosDiscardBuildSettings())
@@ -17,17 +17,17 @@ pipeline {
   parameters {
     string(
       name: 'TOOLS_VERSION',
-      defaultValue: '15.3.0',
+      defaultValue: '15.3.1',
       description: 'The XTC tools version'
     )
     string(
       name: 'XMOSDOC_VERSION',
-      defaultValue: 'v6.1.2',
+      defaultValue: 'v7.3.0',
       description: 'The xmosdoc version'
     )
     string(
       name: 'INFR_APPS_VERSION',
-      defaultValue: 'v2.0.1',
+      defaultValue: 'v2.2.0',
       description: 'The infr_apps version'
     )
   }
@@ -39,13 +39,12 @@ pipeline {
       stages {
         stage('xcore app build') {
           steps {
-            dir("${REPO}") {
-              checkout scm
+            dir("${REPO_NAME}") {
+              checkoutScmShallow()
 
               dir("examples") {
                 withTools(params.TOOLS_VERSION) {
-                  sh 'cmake -G "Unix Makefiles" -B build'
-                  sh 'xmake -C build -j 8'
+                  xcoreBuild()
                   stash name: 'examples', includes: '**/*.xe'
                 }
               }
@@ -54,7 +53,7 @@ pipeline {
                 buildDocs()
               }
             }
-            runLibraryChecks("${WORKSPACE}/${REPO}", "${params.INFR_APPS_VERSION}")
+            runLibraryChecks("${WORKSPACE}/${REPO_NAME}", "${params.INFR_APPS_VERSION}")
           }
         }
       }
@@ -70,12 +69,11 @@ pipeline {
         label 'xcore.ai'
       }
       steps {
-        dir("${REPO}") {
-          checkout scm
+        dir("${REPO_NAME}") {
+          checkoutScmShallow()
           withTools(params.TOOLS_VERSION) {
             dir("tests") {
-              sh 'cmake -G "Unix Makefiles" -B build'
-              sh 'xmake -C build -j 8'
+              xcoreBuild()
 
               //Run this and diff against expected output. Note we have the lib files here available
               sh 'xrun --io --id 0 debug_printf_test/bin/debug_printf_test.xe &> debug_printf_test.txt'
