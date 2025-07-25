@@ -1,4 +1,4 @@
-// Copyright 2014-2021 XMOS LIMITED.
+// Copyright 2014-2025 XMOS LIMITED.
 // This Software is subject to the terms of the XMOS Public Licence: Version 1.
 #include <debug_print.h>
 #include <print.h>
@@ -11,11 +11,11 @@
 
 #undef debug_printf
 
-static void reverse_array(char buf[], unsigned size)
+static void reverse_array(char buf[], int size)
 {
   int begin = 0;
   int end = size - 1;
-  int tmp;
+  char tmp;
   for (;begin < end; begin++,end--) {
     tmp = buf[begin];
     buf[begin] = buf[end];
@@ -26,7 +26,7 @@ static void reverse_array(char buf[], unsigned size)
 static int itoa(unsigned n, char *buf, unsigned base, int fill)
 {
   static const char digits[] = "0123456789ABCDEF";
-  unsigned i = 0;
+  int i = 0;
 
   if (n == 0)
     fill += 1;
@@ -72,7 +72,7 @@ void debug_printf(char * fmt, ...)
   while (*fmt) {
     if (p > end) {
       // flush
-      _write(FD_STDOUT, buf, p - buf);
+      _write(FD_STDOUT, buf,  (size_t)(p - buf));
       p = buf;
     }
     switch (*fmt) {
@@ -94,32 +94,32 @@ void debug_printf(char * fmt, ...)
           *p++ = '-';
           intArg = -intArg;
         }
-        p += itoa(intArg, p, 10, 0);
+        p += itoa((unsigned)intArg, p, 10, 0);
         break;
       case 'u':
-        uintArg = va_arg(args, int);
+        uintArg = va_arg(args, unsigned int);
         p += itoa(uintArg, p, 10, 0);
         break;
       case 'p':
       case 'x':
-        uintArg = va_arg(args, int);
+        uintArg = va_arg(args, unsigned int);
         p += itoa(uintArg, p, 16, 0);
         break;
       case 'c':
         intArg = va_arg(args, int);
-        *p++ = intArg;
+        *p++ = (char)intArg;
         break;
       case 's':
         strArg = va_arg(args, char *);
-        int len = strlen(strArg);
+        int len = (int)strlen(strArg);
         if (len > (end - buf)) {
                 // flush
-          _write(FD_STDOUT, buf, p - buf);
+          _write(FD_STDOUT, buf, (size_t)(p - buf));
           p = buf;
         }
         if (len > (end - buf))
           len = end - buf;
-        memcpy(p, strArg, len);
+        memcpy(p, strArg, (size_t)len);
         p += len;
         break;
       default:
@@ -132,7 +132,7 @@ void debug_printf(char * fmt, ...)
     }
     fmt++;
   }
-  _write(FD_STDOUT, buf, p - buf);
+  _write(FD_STDOUT, buf, (size_t)(p - buf));
   va_end(args);
 
   return;

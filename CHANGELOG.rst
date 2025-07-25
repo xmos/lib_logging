@@ -1,6 +1,11 @@
 lib_logging change log
 ======================
 
+UNRELEASED
+----------
+
+  * UPDATED: Fixed type conversion warnings
+
 3.3.1
 -----
 
