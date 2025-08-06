@@ -1,8 +1,9 @@
----
+# This file relates to internal XMOS infrastructure and should be ignored by external users
+
 lib_name: lib_logging
 project: '{{lib_name}}'
 title: '{{lib_name}}: Debug Printing'
-version: 3.3.1
+version: 3.3.2
 
 documentation:
   exclude_patterns_path: doc/exclude_patterns.inc
