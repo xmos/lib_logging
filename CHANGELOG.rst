@@ -4,67 +4,67 @@ lib_logging change log
 3.3.2
 -----
 
-  * UPDATED: Fixed type conversion warnings
+  * FIXED:     Fixed type conversion warnings
 
 3.3.1
 -----
 
-  * CHANGED: Documentation updates
+  * CHANGED:   Documentation updates
 
 3.3.0
 -----
 
-  * CHANGED: Build applications using XCommon CMake instead of XCommon
+  * CHANGED:   Build applications using XCommon CMake instead of XCommon
 
 3.2.0
 -----
 
-  * ADDED:   Support for XCommon CMake build system
+  * ADDED:     Support for XCommon CMake build system
 
 3.1.1
 -----
 
-  * CHANGED: Jenkinsfile used for CI
+  * CHANGED:   Jenkinsfile used for CI
 
 3.1.0
 -----
 
-  * CHANGED: Use XMOS Public Licence Version 1
+  * CHANGED:   Use XMOS Public Licence Version 1
 
 3.0.2
 -----
 
-  * REMOVED: not necessary cpanfile
+  * REMOVED:   Not necessary cpanfile
 
 3.0.1
 -----
 
-  * CHANGED: Pin Python package versions
+  * CHANGED:   Pin Python package versions
 
 3.0.0
 -----
 
-  * CHANGED: Build files updated to support new "xcommon" behaviour in xwaf.
+  * CHANGED:   Build files updated to support new "xcommon" behaviour in xwaf.
 
 2.1.1
 -----
 
-  * CHANGE:   Test runner script now terminates correctly on Windows
+  * CHANGED:   Test runner script now terminates correctly on Windows
 
 2.1.0
 -----
 
-  * ADDED:    Now supports the %p format specifier
-  * CHANGE:   Ignore the case of the format specifiers
-  * CHANGE:   Ignore padding and alignment characters
+  * ADDED:     Now supports the %p format specifier
+  * CHANGED:   Ignore the case of the format specifiers
+  * CHANGED:   Ignore padding and alignment characters
 
 2.0.1
 -----
 
-  * CHANGE:   Update to source code license and copyright
+  * CHANGED:   Update to source code license and copyright
 
 2.0.0
 -----
 
-  * CHANGE:   Restructured library
+  * CHANGED:   Restructured library
 
