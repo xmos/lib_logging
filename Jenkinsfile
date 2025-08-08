@@ -82,6 +82,12 @@ pipeline {
             }
           }
         }
+        stage("Archive sandbox") {
+          steps
+          {
+            archiveSandbox(REPO_NAME)
+          }
+        }
       }
     } // stage: Build and checks
 
@@ -94,7 +100,7 @@ pipeline {
           checkoutScmShallow()
           withTools(params.TOOLS_VERSION) {
             dir("tests") {
-              xcoreBuild()
+              xcoreBuild(archiveBins: false)
 
               //Run this and diff against expected output. Note we have the lib files here available
               sh 'xrun --io --id 0 debug_printf_test/bin/debug_printf_test.xe &> debug_printf_test.txt'
