@@ -5,16 +5,16 @@ lib_logging: Debug Printing
 ###########################
 
 :vendor: XMOS
-:version: 3.3.1
+:version: 3.3.2
 :scope: General Use
 :description: Debug printing
 :category: General Purpose
 :keywords: logging, debugging
 :devices: xcore.ai, xcore-200
 
-********
-Overview
-********
+*******
+Summary
+*******
 
 This library provides a lightweight printf function that can be enabled
 or disabled via configuration defines. Code can be declared to be
@@ -25,35 +25,41 @@ and prints can be enabled/disabled per debug unit.
 Features
 ********
 
-  * Low memory usage
-  * Ability to enable or disable printing via compile options
-  * Ability to enable or disable printing for sets of source files
+* Low memory usage
+* Ability to enable or disable printing via compile options
+* Ability to enable or disable printing for sets of source files
 
 ************
-Known Issues
+Known issues
 ************
 
-  * None
+* None
+
+****************
+Development repo
+****************
+
+https://github.com/xmos/lib_logging
 
 **************
-Required Tools
+Required tools
 **************
 
-  * XMOS XTC Tools: 15.3.0
+* XMOS XTC Tools: 15.3.1
 
 *********************************
-Required Libraries (dependencies)
+Required libraries (dependencies)
 *********************************
 
-  * None
+* None
 
 *************************
-Related Application Notes
+Related application notes
 *************************
 
 The following application notes use this library:
 
-  * AN00239: Using the logging library
+* AN00239: Using the logging library
 
 *******
 Support

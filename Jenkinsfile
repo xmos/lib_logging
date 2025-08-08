@@ -1,16 +1,14 @@
 // This file relates to internal XMOS infrastructure and should be ignored by external users
 
-@Library('xmos_jenkins_shared_library@v0.39.0') _
+@Library('xmos_jenkins_shared_library@v0.41.1') _
 
 getApproval()
 
 pipeline {
   agent none
-  environment {
-    REPO_NAME = 'lib_logging'
-  }
+  
   options {
-    buildDiscarder(xmosDiscardBuildSettings())
+    buildDiscarder(xmosDiscardBuildSettings(onlyArtifacts = false))
     skipDefaultCheckout()
     timestamps()
   }
@@ -22,47 +20,70 @@ pipeline {
     )
     string(
       name: 'XMOSDOC_VERSION',
-      defaultValue: 'v7.3.0',
+      defaultValue: 'v7.4.0',
       description: 'The xmosdoc version'
     )
     string(
       name: 'INFR_APPS_VERSION',
-      defaultValue: 'v2.2.0',
+      defaultValue: 'v3.1.1',
       description: 'The infr_apps version'
     )
   }
-  stages {
-    stage('Build') {
-      agent {
-        label 'x86_64 && linux'
-      }
-      stages {
-        stage('xcore app build') {
-          steps {
-            dir("${REPO_NAME}") {
-              checkoutScmShallow()
 
-              dir("examples") {
-                withTools(params.TOOLS_VERSION) {
-                  xcoreBuild()
-                  stash name: 'examples', includes: '**/*.xe'
-                }
-              }
-              buildDocs()
-              dir("examples/AN00239") {
-                buildDocs()
-              }
+  stages {
+    stage('🏗️ Build and checks') {
+      agent {
+        label 'x86_64 && linux && documentation'
+      }
+
+      stages {
+        stage('Checkout') {
+          steps {
+            println "Stage running on ${env.NODE_NAME}"
+
+            script {
+              def (server, user, repo) = extractFromScmUrl()
+              env.REPO_NAME = repo
             }
-            runLibraryChecks("${WORKSPACE}/${REPO_NAME}", "${params.INFR_APPS_VERSION}")
+
+            dir(REPO_NAME){
+              checkoutScmShallow()
+            }
+          }
+        }
+
+        stage('Examples build') {
+          steps {
+            dir("${REPO_NAME}/examples") {
+              xcoreBuild()
+              stash name: 'examples', includes: '**/*.xe'
+            }
+          }
+        }
+
+        stage('Repo checks') {
+          steps {
+            warnError("Repo checks failed")
+            {
+              runRepoChecks("${WORKSPACE}/${REPO_NAME}")
+            }
+          }
+        }
+
+        stage('Doc build') {
+          steps {
+            dir(REPO_NAME) {
+              buildDocs()
+              
+              // TODO: move app-note out of library...
+              // dir("examples/AN00239") {
+              //   buildDocs()
+              // }
+            }
           }
         }
       }
-      post {
-        cleanup {
-          xcoreCleanSandbox()
-        }
-      }
-    }
+    } // stage: Build and checks
 
     stage('xcore.ai Verification') {
       agent {
@@ -94,6 +115,13 @@ pipeline {
           xcoreCleanSandbox()
         }
       }
-    }// xcore.ai
-  }
+    } // xcore.ai
+
+    stage('🚀 Release') {
+      steps {
+        triggerRelease()
+      }
+    }
+
+  } // stages
 }
