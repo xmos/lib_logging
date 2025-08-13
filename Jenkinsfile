@@ -74,11 +74,6 @@ pipeline {
           steps {
             dir(REPO_NAME) {
               buildDocs()
-              
-              // TODO: move app-note out of library...
-              // dir("examples/AN00239") {
-              //   buildDocs()
-              // }
             }
           }
         }
@@ -110,7 +105,7 @@ pipeline {
             dir("examples") {
               unstash 'examples'
               //Just run these and error on exception
-              sh 'xrun --io --id 0 AN00239/bin/AN00239.xe'
+              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
               sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
             }
           }
