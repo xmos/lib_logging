@@ -5,7 +5,7 @@ lib_logging: Debug Printing
 ###########################
 
 :vendor: XMOS
-:version: 3.3.2
+:version: 3.4.0
 :scope: General Use
 :description: Debug printing
 :category: General Purpose
@@ -57,9 +57,7 @@ Required libraries (dependencies)
 Related application notes
 *************************
 
-The following application notes use this library:
-
-* AN00239: Using the logging library
+* None
 
 *******
 Support

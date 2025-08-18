@@ -1,6 +1,12 @@
 lib_logging change log
 ======================
 
+3.4.0
+-----
+
+  * CHANGED: Renamed application note "AN00239" to example "app_debug_unit",
+    merged app-note documentation into library documentation.
+
 3.3.2
 -----
 
