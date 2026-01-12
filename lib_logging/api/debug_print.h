@@ -1,4 +1,4 @@
-// Copyright 2014-2025 XMOS LIMITED.
+// Copyright 2014-2026 XMOS LIMITED.
 // This Software is subject to the terms of the XMOS Public Licence: Version 1.
 #ifndef _debug_printf_h_
 #define _debug_printf_h_
@@ -60,9 +60,6 @@ enabled/disabled per debug unit.
  *   case equivalent.
  *
  *   Any alignment or padding characters are simply ignored.
- *
- *   The function uses the functions from ``print.h`` to do the
- *   underlying printing.
  *
  *   Unlike printf this function has no return value.
  *

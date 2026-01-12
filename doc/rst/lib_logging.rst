@@ -126,7 +126,7 @@ Example application output
 
 The example application outputs "Hello world".
 
-.. literalinclude:: ../../examples/app_debug_unit/src/main.xc
+.. literalinclude:: ../../examples/app_debug_unit/src/main.c
   :language: c
   :start-at: main(
   :end-at: debug_printf(
@@ -163,14 +163,14 @@ Debug units by example
 Applications can be created with different *units* whose debug output is independently
 controlled. The example application also calls a function in another unit:
 
-.. literalinclude:: ../../examples/app_debug_unit/src/main.xc
+.. literalinclude:: ../../examples/app_debug_unit/src/main.c
   :language: c
   :start-at: unit_function(
   :end-at: unit_function(
 
 That file has put its debug messages as a separate debug unit by doing:
 
-.. literalinclude:: ../../examples/app_debug_unit/src/unit.xc
+.. literalinclude:: ../../examples/app_debug_unit/src/unit.c
   :language: c
   :start-at: define
   :end-at: include
@@ -183,7 +183,7 @@ will only produce the following output.
   $ xrun --xscope bin/app_debug_unit.xe
   Hello world
 
-In order to enable the debug_print messages in ``unit.xc`` it is necessary to
+In order to enable the debug_print messages in ``unit.c`` it is necessary to
 add to the list of compiler flags in the ``CMakeLists.txt`` file.
 
 .. code-block:: cmake

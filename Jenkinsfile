@@ -20,18 +20,18 @@ pipeline {
     )
     string(
       name: 'XMOSDOC_VERSION',
-      defaultValue: 'v7.4.0',
+      defaultValue: 'v8.0.1',
       description: 'The xmosdoc version'
     )
     string(
       name: 'INFR_APPS_VERSION',
-      defaultValue: 'v3.1.1',
+      defaultValue: 'v3.2.1',
       description: 'The infr_apps version'
     )
   }
 
   stages {
-    stage('🏗️ Build and checks') {
+    stage('🏗️ Build and test') {
       agent {
         label 'x86_64 && linux && documentation'
       }
@@ -77,6 +77,28 @@ pipeline {
             }
           }
         }
+
+        stage('Tests') {
+          steps {
+            
+            dir("${REPO_NAME}/tests") {
+                withTools(params.TOOLS_VERSION) {
+                    createVenv(reqFile: "requirements.txt")
+                    withVenv {
+                        xcoreBuild(archiveBins: false)
+                        sh "pytest -n auto --junitxml=pytest_result.xml"
+                    }
+                }
+            }
+          
+            dir("${REPO_NAME}/examples") {
+              //Just run these and error on exception
+              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
+              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
+            }
+          }
+        }
+
         stage("Archive sandbox") {
           steps
           {
@@ -84,39 +106,7 @@ pipeline {
           }
         }
       }
-    } // stage: Build and checks
-
-    stage('xcore.ai Verification') {
-      agent {
-        label 'xcore.ai'
-      }
-      steps {
-        dir("${REPO_NAME}") {
-          checkoutScmShallow()
-          withTools(params.TOOLS_VERSION) {
-            dir("tests") {
-              xcoreBuild(archiveBins: false)
-
-              //Run this and diff against expected output. Note we have the lib files here available
-              sh 'xrun --io --id 0 debug_printf_test/bin/debug_printf_test.xe &> debug_printf_test.txt'
-              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt test.expect'
-            }
-
-            dir("examples") {
-              unstash 'examples'
-              //Just run these and error on exception
-              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
-              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
-            }
-          }
-        }
-      }
-      post {
-        cleanup {
-          xcoreCleanSandbox()
-        }
-      }
-    } // xcore.ai
+    } // stage: Build and test
 
     stage('🚀 Release') {
       steps {
