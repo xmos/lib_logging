@@ -11,6 +11,8 @@
 *.swn
 *~
 *.DS_Store
+*.out
+pytest_result.xml
 
 # Python
 *.pyc
