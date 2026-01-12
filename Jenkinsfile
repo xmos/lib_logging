@@ -31,7 +31,7 @@ pipeline {
   }
 
   stages {
-    stage('🏗️ Build and checks') {
+    stage('🏗️ Build and test') {
       agent {
         label 'x86_64 && linux && documentation'
       }
@@ -77,6 +77,28 @@ pipeline {
             }
           }
         }
+
+        stage('Tests') {
+          steps {
+            
+            dir("${REPO_NAME}/tests") {
+                withTools(params.TOOLS_VERSION) {
+                    createVenv(reqFile: "requirements.txt")
+                    withVenv {
+                        xcoreBuild(archiveBins: false)
+                        sh "pytest -n auto --junitxml=pytest_result.xml"
+                    }
+                }
+            }
+          
+            dir("${REPO_NAME}/examples") {
+              //Just run these and error on exception
+              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
+              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
+            }
+          }
+        }
+
         stage("Archive sandbox") {
           steps
           {
@@ -84,38 +106,7 @@ pipeline {
           }
         }
       }
-    } // stage: Build and checks
-
-    stage('xcore.ai Verification') {
-      agent {
-        label 'xcore.ai'
-      }
-      steps {
-        dir("${REPO_NAME}") {
-          checkoutScmShallow()
-          withTools(params.TOOLS_VERSION) {
-            dir("tests") {
-              createVenv(reqFile: "requirements.txt")
-              withVenv {
-                xcoreBuild(archiveBins: false)
-                sh "pytest -n auto --junitxml=pytest_result.xml"
-              }
-            }
-            dir("examples") {
-              unstash 'examples'
-              //Just run these and error on exception
-              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
-              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
-            }
-          }
-        }
-      }
-      post {
-        cleanup {
-          xcoreCleanSandbox()
-        }
-      }
-    } // xcore.ai
+    } // stage: Build and test
 
     stage('🚀 Release') {
       steps {
