@@ -7,7 +7,7 @@ lib_logging: Debug Printing
 :vendor: XMOS
 :version: 3.4.0
 :scope: General Use
-:description: Debug printing
+:description: Debug Print Library
 :category: General Purpose
 :keywords: Debug
 :devices: xcore.ai, xcore-200
