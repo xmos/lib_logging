@@ -1,13 +1,12 @@
 // Copyright 2014-2025 XMOS LIMITED.
 // This Software is subject to the terms of the XMOS Public Licence: Version 1.
-#include <debug_print.h>
-#include <print.h>
 #include <stdarg.h>
 #include <syscall.h>
 #include <limits.h>
-#include <print.h>
 #include <string.h>
 #include <ctype.h>
+
+#include "debug_print.h"
 
 #undef debug_printf
 
@@ -137,5 +136,3 @@ void debug_printf(char * fmt, ...)
 
   return;
 }
-
-

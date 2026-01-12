@@ -61,9 +61,6 @@ enabled/disabled per debug unit.
  *
  *   Any alignment or padding characters are simply ignored.
  *
- *   The function uses the functions from ``print.h`` to do the
- *   underlying printing.
- *
  *   Unlike printf this function has no return value.
  *
  *   Whether the function does any output can be controlled via

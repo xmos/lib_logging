@@ -95,13 +95,12 @@ pipeline {
           checkoutScmShallow()
           withTools(params.TOOLS_VERSION) {
             dir("tests") {
-              xcoreBuild(archiveBins: false)
-
-              //Run this and diff against expected output. Note we have the lib files here available
-              sh 'xrun --io --id 0 debug_printf_test/bin/debug_printf_test.xe &> debug_printf_test.txt'
-              sh 'cat debug_printf_test.txt && diff debug_printf_test.txt test.expect'
+              createVenv(reqFile: "requirements.txt")
+              withVenv {
+                xcoreBuild(archiveBins: false)
+                sh "pytest -n auto --junitxml=pytest_result.xml"
+              }
             }
-
             dir("examples") {
               unstash 'examples'
               //Just run these and error on exception
