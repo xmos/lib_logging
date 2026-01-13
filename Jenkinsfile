@@ -92,9 +92,10 @@ pipeline {
             }
           
             dir("${REPO_NAME}/examples") {
-              //Just run these and error on exception
-              sh 'xrun --io --id 0 app_debug_unit/bin/app_debug_unit.xe'
-              sh 'xrun --io --id 0 app_debug_printf/bin/app_debug_printf.xe'
+                withTools(params.TOOLS_VERSION) {
+                    sh 'xsim app_debug_unit/bin/app_debug_unit.xe'
+                    sh 'xsim app_debug_printf/bin/app_debug_printf.xe'
+                }
             }
           }
         }
