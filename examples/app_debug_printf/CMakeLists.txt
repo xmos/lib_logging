@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.21)
 include($ENV{XMOS_CMAKE_PATH}/xcommon.cmake)
 project(app_debug_printf)
 
-set(APP_HW_TARGET XK-EVK-XU316)
+if(NOT DEFINED APP_HW_TARGET)
+  set(APP_HW_TARGET XK-EVK-XU316)
+endif()
 
 set(APP_COMPILER_FLAGS -DDEBUG_PRINT_ENABLE=1)
 
