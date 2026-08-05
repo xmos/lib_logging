@@ -1,12 +1,12 @@
 // This file relates to internal XMOS infrastructure and should be ignored by external users
 
-@Library('xmos_jenkins_shared_library@v0.41.1') _
+@Library('xmos_jenkins_shared_library@v0.53.0') _
 
 getApproval()
 
 pipeline {
   agent none
-  
+
   options {
     buildDiscarder(xmosDiscardBuildSettings(onlyArtifacts = false))
     skipDefaultCheckout()
@@ -14,9 +14,14 @@ pipeline {
   }
   parameters {
     string(
-      name: 'TOOLS_VERSION',
+      name: 'TOOLS_VERSION_XS',
       defaultValue: '15.3.1',
-      description: 'The XTC tools version'
+      description: 'The XS XTC tools version'
+    )
+    string(
+      name: 'TOOLS_VERSION_VX',
+      defaultValue: '-j --repo arch_vx_slipgate -b master -a XTC 131',
+      description: 'The VX XTCtools version'
     )
     string(
       name: 'XMOSDOC_VERSION',
@@ -52,11 +57,62 @@ pipeline {
           }
         }
 
-        stage('Examples build') {
+        stage('Build XS') {
           steps {
             dir("${REPO_NAME}/examples") {
-              xcoreBuild()
-              stash name: 'examples', includes: '**/*.xe'
+              xcoreBuild(
+                toolsVersion: params.TOOLS_VERSION_XS,
+                buildDir: 'build-xs',
+              )
+            }
+          }
+        }
+
+        stage('Test XS') {
+          steps {
+            dir("${REPO_NAME}/tests") {
+              xcoreBuild(
+                toolsVersion: params.TOOLS_VERSION_XS,
+                buildDir: 'build-xs',
+                archiveBins: false
+              )
+              withTools(params.TOOLS_VERSION_XS) {
+                createVenv(reqFile: 'requirements.txt')
+                withVenv {
+                  runPytest()
+                }
+              }
+            }
+          }
+        }
+
+        stage('Build VX') {
+          steps {
+            dir("${REPO_NAME}/examples") {
+              xcoreBuild(
+                toolsVersion: params.TOOLS_VERSION_VX,
+                buildDir: 'build-vx',
+                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416'
+              )
+            }
+          }
+        }
+
+        stage('Test VX') {
+          steps {
+            dir("${REPO_NAME}/tests") {
+              xcoreBuild(
+                toolsVersion: params.TOOLS_VERSION_VX,
+                buildDir: 'build-vx',
+                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416',
+                archiveBins: false
+              )
+              withTools(params.TOOLS_VERSION_VX) {
+                createVenv(reqFile: 'requirements.txt')
+                withVenv {
+                  runPytest()
+                }
+              }
             }
           }
         }
@@ -74,28 +130,6 @@ pipeline {
           steps {
             dir(REPO_NAME) {
               buildDocs()
-            }
-          }
-        }
-
-        stage('Tests') {
-          steps {
-            
-            dir("${REPO_NAME}/tests") {
-                withTools(params.TOOLS_VERSION) {
-                    createVenv(reqFile: "requirements.txt")
-                    withVenv {
-                        xcoreBuild(archiveBins: false)
-                        sh "pytest -n auto --junitxml=pytest_result.xml"
-                    }
-                }
-            }
-          
-            dir("${REPO_NAME}/examples") {
-                withTools(params.TOOLS_VERSION) {
-                    sh 'xsim app_debug_unit/bin/app_debug_unit.xe'
-                    sh 'xsim app_debug_printf/bin/app_debug_printf.xe'
-                }
             }
           }
         }
