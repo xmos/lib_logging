@@ -30,7 +30,7 @@ pipeline {
     )
     string(
       name: 'INFR_APPS_VERSION',
-      defaultValue: 'v3.2.1',
+      defaultValue: 'v3.6.0',
       description: 'The infr_apps version'
     )
   }
@@ -144,6 +144,9 @@ pipeline {
     } // stage: Build and test
 
     stage('🚀 Release') {
+      when {
+        expression { triggerRelease.isReleasable() }
+      }
       steps {
         triggerRelease()
       }
