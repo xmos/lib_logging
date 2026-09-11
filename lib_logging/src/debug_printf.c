@@ -55,7 +55,6 @@ static int itoa(unsigned n, char *buf, unsigned base, int fill)
 
 void debug_printf(char * fmt, ...)
 {
-  char * marker;
   int intArg;
   unsigned int uintArg;
   char * strArg;
@@ -66,7 +65,6 @@ void debug_printf(char * fmt, ...)
   va_list args;
 
   va_start(args,fmt);
-  marker = fmt;
   char *p = buf;
   while (*fmt) {
     if (p > end) {
@@ -86,7 +84,7 @@ void debug_printf(char * fmt, ...)
         fmt++;
       }
       // Use 'tolower' to ensure both %x/%X do something sensible
-      switch (tolower(*(fmt))) {
+      switch (tolower((int)*(fmt))) {
       case 'd':
         intArg = va_arg(args, int);
         if (intArg < 0) {
