@@ -74,6 +74,7 @@ pipeline {
               xcoreBuild(
                 toolsVersion: params.TOOLS_VERSION_XS,
                 buildDir: 'build-xs',
+                cmakeOpts: '-DLOGGING_BUILD_XC_TESTS=ON',
                 archiveBins: false
               )
               withTools(params.TOOLS_VERSION_XS) {
@@ -104,13 +105,13 @@ pipeline {
               xcoreBuild(
                 toolsVersion: params.TOOLS_VERSION_VX,
                 buildDir: 'build-vx',
-                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416',
+                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416 -DLOGGING_BUILD_XC_TESTS=OFF',
                 archiveBins: false
               )
               withTools(params.TOOLS_VERSION_VX) {
                 createVenv(reqFile: 'requirements.txt')
                 withVenv {
-                  runPytest()
+                  runPytest('--ignore=test_lib_logging_xc.py')
                 }
               }
             }
