@@ -1,156 +1,140 @@
 // This file relates to internal XMOS infrastructure and should be ignored by external users
 
-@Library('xmos_jenkins_shared_library@v0.53.0') _
+@Library('xmos_jenkins_shared_library@v0.56.0') _
 
 getApproval()
-
 pipeline {
-  agent none
 
-  options {
-    buildDiscarder(xmosDiscardBuildSettings(onlyArtifacts = false))
-    skipDefaultCheckout()
-    timestamps()
-  }
-  parameters {
-    string(
-      name: 'TOOLS_VERSION_XS',
-      defaultValue: '15.3.1',
-      description: 'The XS XTC tools version'
-    )
-    string(
-      name: 'TOOLS_VERSION_VX',
-      defaultValue: '-j --repo arch_vx_slipgate -b master -a XTC 131',
-      description: 'The VX XTCtools version'
-    )
-    string(
-      name: 'XMOSDOC_VERSION',
-      defaultValue: 'v8.0.1',
-      description: 'The xmosdoc version'
-    )
-    string(
-      name: 'INFR_APPS_VERSION',
-      defaultValue: 'v3.6.0',
-      description: 'The infr_apps version'
-    )
-  }
+    agent none
 
-  stages {
-    stage('🏗️ Build and test') {
-      agent {
-        label 'x86_64 && linux && documentation'
-      }
-
-      stages {
-        stage('Checkout') {
-          steps {
-            println "Stage running on ${env.NODE_NAME}"
-
-            script {
-              def (server, user, repo) = extractFromScmUrl()
-              env.REPO_NAME = repo
-            }
-
-            dir(REPO_NAME){
-              checkoutScmShallow()
-            }
-          }
-        }
-
-        stage('Build XS') {
-          steps {
-            dir("${REPO_NAME}/examples") {
-              xcoreBuild(
-                toolsVersion: params.TOOLS_VERSION_XS,
-                buildDir: 'build-xs',
-              )
-            }
-          }
-        }
-
-        stage('Test XS') {
-          steps {
-            dir("${REPO_NAME}/tests") {
-              xcoreBuild(
-                toolsVersion: params.TOOLS_VERSION_XS,
-                buildDir: 'build-xs',
-                archiveBins: false
-              )
-              withTools(params.TOOLS_VERSION_XS) {
-                createVenv(reqFile: 'requirements.txt')
-                withVenv {
-                  runPytest()
-                }
-              }
-            }
-          }
-        }
-
-        stage('Build VX') {
-          steps {
-            dir("${REPO_NAME}/examples") {
-              xcoreBuild(
-                toolsVersion: params.TOOLS_VERSION_VX,
-                buildDir: 'build-vx',
-                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416'
-              )
-            }
-          }
-        }
-
-        stage('Test VX') {
-          steps {
-            dir("${REPO_NAME}/tests") {
-              xcoreBuild(
-                toolsVersion: params.TOOLS_VERSION_VX,
-                buildDir: 'build-vx',
-                cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416',
-                archiveBins: false
-              )
-              withTools(params.TOOLS_VERSION_VX) {
-                createVenv(reqFile: 'requirements.txt')
-                withVenv {
-                  runPytest()
-                }
-              }
-            }
-          }
-        }
-
-        stage('Repo checks') {
-          steps {
-            warnError("Repo checks failed")
-            {
-              runRepoChecks("${WORKSPACE}/${REPO_NAME}")
-            }
-          }
-        }
-
-        stage('Doc build') {
-          steps {
-            dir(REPO_NAME) {
-              buildDocs()
-            }
-          }
-        }
-
-        stage("Archive sandbox") {
-          steps
-          {
-            archiveSandbox(REPO_NAME)
-          }
-        }
-      }
-    } // stage: Build and test
-
-    stage('🚀 Release') {
-      when {
-        expression { triggerRelease.isReleasable() }
-      }
-      steps {
-        triggerRelease()
-      }
+    parameters {
+        string(
+            name: 'TOOLS_VERSION_XS',
+            defaultValue: '15.3.1',
+            description: 'XTC tools version'
+        )
+        string(
+            name: 'TOOLS_VERSION_VX',
+            defaultValue: 'bob@develop',
+            description: 'VX tools version'
+        )
+        string(
+            name: 'TOOLS_VERSION_VX_XCC',
+            defaultValue: 'slipgate@master:143',
+            description: 'VX (XTC) tools version'
+        )
+        string(
+            name: 'XMOSDOC_VERSION',
+            defaultValue: 'v8.1.2',
+            description: 'xmosdoc version'
+        )
+        string(
+            name: 'INFR_APPS_VERSION',
+            defaultValue: 'v3.6.0',
+            description: 'The infr_apps version'
+        )
+        choice(
+            name: 'TEST_LEVEL', choices: ['smoke', 'default', 'extended'],
+            description: 'The level of test coverage to run'
+        )
     }
 
-  } // stages
-}
+    options {
+        skipDefaultCheckout()
+        timestamps()
+        buildDiscarder(xmosDiscardBuildSettings(onlyArtifacts = false))
+    }
+
+    stages {
+        stage('🏗️ Build and test') {
+            agent {
+                label 'x86_64 && linux && documentation'
+            }
+
+            stages {
+                stage('Checkout') {
+                    steps {
+
+                        println "Stage running on ${env.NODE_NAME}"
+
+                        script {
+                            def (server, user, repo) = extractFromScmUrl()
+                            env.REPO_NAME = repo
+                        }
+
+                        dir(REPO_NAME){
+                            checkoutScmShallow()
+                        }
+                    }
+                }
+
+                stage('Examples build') {
+                    steps {
+                        dir("${REPO_NAME}/examples") {
+                            xcoreBuildAllArch()
+                        }
+                    }
+                }
+
+                stage('Repo checks') {
+                    steps {
+                        warnError("Repo checks failed")
+                        {
+                            runRepoChecks("${WORKSPACE}/${REPO_NAME}")
+                        }
+                    }
+                }
+
+                stage('Doc build') {
+                    steps {
+                        dir(REPO_NAME) {
+                            buildDocs()
+                        }
+                    }
+                }
+
+                stage('Tests') {
+                    steps {
+                        dir("${REPO_NAME}/tests") {
+                            createVenv(reqFile: "requirements.txt")
+                            withVenv {
+                              withTools(params.TOOLS_VERSION_XS) {
+                                xcoreBuild(archiveBins: false)
+                                runPytest("--level=${params.TEST_LEVEL}")
+                              }
+                              withTools(params.TOOLS_VERSION_VX) {
+                                xcoreBuild(archiveBins: false)
+                                runPytest("--level=${params.TEST_LEVEL}")
+                              }
+                              withTools(params.TOOLS_VERSION_VX_XCC) {
+                                xcoreBuild(archiveBins: false, cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416')
+                                runPytest("--level=${params.TEST_LEVEL}")
+                              }
+                            }
+                        }
+                    }
+                }
+
+                stage("Archive sandbox") {
+                    steps {
+                        archiveSandbox(REPO_NAME)
+                    }
+                }
+            } // stages
+            post {
+                cleanup {
+                    xcoreCleanSandbox()
+                }
+            }
+        } // stage 'Build and test'
+
+        stage('🚀 Release') {
+            when {
+                expression { triggerRelease.isReleasable() }
+            }
+            steps {
+                triggerRelease()
+            }
+        }
+    } // stages
+} // pipeline
