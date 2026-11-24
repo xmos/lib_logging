@@ -33,10 +33,6 @@ pipeline {
             defaultValue: 'v3.6.0',
             description: 'The infr_apps version'
         )
-        choice(
-            name: 'TEST_LEVEL', choices: ['smoke', 'default', 'extended'],
-            description: 'The level of test coverage to run'
-        )
     }
 
     options {
@@ -100,15 +96,15 @@ pipeline {
                             withVenv {
                               withTools(params.TOOLS_VERSION_XS) {
                                 xcoreBuild(archiveBins: false)
-                                runPytest("--level=${params.TEST_LEVEL}")
+                                runPytest()
                               }
                               withTools(params.TOOLS_VERSION_VX) {
                                 xcoreBuild(archiveBins: false)
-                                runPytest("--level=${params.TEST_LEVEL}")
+                                runPytest()
                               }
                               withTools(params.TOOLS_VERSION_VX_XCC) {
                                 xcoreBuild(archiveBins: false, cmakeOpts: '-DAPP_HW_TARGET=XK-EVK-XU416')
-                                runPytest("--level=${params.TEST_LEVEL}")
+                                runPytest()
                               }
                             }
                         }
