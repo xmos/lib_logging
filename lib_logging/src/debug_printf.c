@@ -84,7 +84,7 @@ void debug_printf(char * fmt, ...)
         fmt++;
       }
       // Use 'tolower' to ensure both %x/%X do something sensible
-      switch (tolower((int)*(fmt))) {
+      switch (tolower((unsigned char)*(fmt))) {
       case 'd':
         intArg = va_arg(args, int);
         if (intArg < 0) {

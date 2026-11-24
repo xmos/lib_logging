@@ -7,7 +7,8 @@ set(LIB_COMPILER_FLAGS  -Os
                         -Wconversion
                         -Wdiv-by-zero
                         -Wfloat-equal
-                        -Wsign-compare)
+                        -Wsign-compare
+                        -Werror)
 set(LIB_DEPENDENT_MODULES "")
 set(LIB_OPTIONAL_HEADERS debug_conf.h)
 
