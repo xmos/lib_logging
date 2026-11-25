@@ -82,3 +82,4 @@ lib_logging change log
 -----
 
   * CHANGED:   Restructured library
+
