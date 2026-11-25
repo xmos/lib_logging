@@ -4,7 +4,7 @@ lib_logging change log
 3.5.0
 -----
 
-  * CHANGED: Removed unused <print.h> header.
+  * CHANGED: Removed unused "print.h" header.
   * CHANGED: Replaced ".xc" files with ".c" files.
   * CHANGED: Updated tests to use Pytest framework and xsim.
   * CHANGED: Library now builds with -Werror.
@@ -82,4 +82,3 @@ lib_logging change log
 -----
 
   * CHANGED:   Restructured library
-
