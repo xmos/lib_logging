@@ -1,8 +1,8 @@
 lib_logging change log
 ======================
 
-UNRELEASED
-----------
+3.5.0
+-----
   
   * CHANGED: Removed unused <print.h> header.
   * CHANGED: Replaced ".xc" files with ".c" files.
@@ -82,4 +82,3 @@ UNRELEASED
 -----
 
   * CHANGED:   Restructured library
-
