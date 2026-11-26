@@ -1,12 +1,14 @@
 lib_logging change log
 ======================
 
-UNRELEASED
-----------
-  
-  * CHANGED: Removed unused <print.h> header.
+3.5.0
+-----
+
+  * CHANGED: Removed unused "print.h" header.
   * CHANGED: Replaced ".xc" files with ".c" files.
   * CHANGED: Updated tests to use Pytest framework and xsim.
+  * CHANGED: Library now builds with -Werror.
+  * FIXED: Compiler warnings when building with VX4 tools.
 
 3.4.0
 -----
