@@ -95,7 +95,7 @@ pipeline {
                             createVenv(reqFile: "requirements.txt")
                             withVenv {
                               withTools(params.TOOLS_VERSION_XS) {
-                                xcoreBuild(archiveBins: false)
+                                xcoreBuild(archiveBins: false,  cmakeOpts: '-DLOGGING_BUILD_XC_TESTS=ON')
                                 runPytest()
                               }
                               withTools(params.TOOLS_VERSION_VX) {
